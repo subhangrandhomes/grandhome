@@ -6,14 +6,21 @@ export function CTAStrip() {
 
   return (
     <>
-      <div className="bg-[#c0392b] text-white flex items-center justify-between px-20 py-[22px]">
+      <div
+        className="text-white flex items-center justify-between px-20 py-6"
+        style={{ background: "linear-gradient(90deg, #1a4a8a 0%, #3a7bd5 100%)" }}
+      >
         <div>
-          <div className="text-[13px] font-medium tracking-[.06em]">Want to list or buy a property?</div>
-          <div className="font-serif text-[26px] font-semibold tracking-[.02em]">+1 800 555 0199</div>
+          <div className="text-[12px] font-sans font-medium tracking-[.08em] text-blue-100">
+            Want to list or buy a property?
+          </div>
+          <div className="font-serif text-[28px] font-semibold tracking-[.02em]">
+            +1 800 555 0199
+          </div>
         </div>
         <button
           onClick={() => setModalOpen(true)}
-          className="h-[38px] px-[26px] border border-white/70 bg-transparent text-white text-[10px] font-semibold tracking-[.16em] uppercase hover:bg-white/20 transition-colors"
+          className="h-[40px] px-7 border border-white/70 bg-transparent text-white text-[10px] font-sans font-semibold tracking-[.16em] uppercase hover:bg-white/20 transition-colors"
         >
           List a property
         </button>

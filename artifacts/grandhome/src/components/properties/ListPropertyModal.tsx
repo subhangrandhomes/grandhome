@@ -28,6 +28,9 @@ export function ListPropertyModal({ open, onClose }: ListPropertyModalProps) {
         queryClient.invalidateQueries({ queryKey: getListPropertiesQueryKey() });
         handleClose();
       },
+      onError: () => {
+        setError("Failed to create listing. Please try again.");
+      },
     },
   });
 
@@ -75,28 +78,36 @@ export function ListPropertyModal({ open, onClose }: ListPropertyModalProps) {
 
   if (!open) return null;
 
+  const inputClass =
+    "h-10 border border-blue-200 px-[14px] text-[13px] font-sans text-[#0f2d56] outline-none focus:border-[#1a4a8a] transition-colors";
+  const labelClass =
+    "text-[10px] font-sans font-semibold tracking-[.14em] uppercase text-[#3a6199]";
+
   return (
     <div
-      className="fixed inset-0 z-[200] bg-black/55 flex items-center justify-center"
+      className="fixed inset-0 z-[200] bg-black/50 flex items-center justify-center"
       onClick={(e) => { if (e.target === e.currentTarget) handleClose(); }}
     >
-      <div className="bg-white w-full max-w-[540px] mx-4" role="dialog" aria-modal="true">
-        <div className="flex items-center justify-between px-7 py-5 border-b border-[#e8e8e8]">
-          <h2 className="font-serif text-[22px] font-medium tracking-[.04em]">List a property</h2>
-          <button onClick={handleClose} className="text-[22px] text-[#999] leading-none px-1 hover:text-[#111]">
+      <div className="bg-white w-full max-w-[540px] mx-4 shadow-2xl" role="dialog" aria-modal="true">
+        {/* Header */}
+        <div className="flex items-center justify-between px-7 py-5 border-b border-blue-100"
+          style={{ background: "linear-gradient(90deg, #0f2d56 0%, #1a4a8a 100%)" }}>
+          <h2 className="font-serif text-[22px] font-semibold text-white">List a property</h2>
+          <button onClick={handleClose} className="text-[22px] text-blue-300 leading-none px-1 hover:text-white transition-colors">
             &times;
           </button>
         </div>
 
-        <div className="flex border-b border-[#e8e8e8] px-7">
+        {/* Tabs */}
+        <div className="flex border-b border-blue-100 px-7 bg-[#f8faff]">
           {(["details", "photos"] as const).map((t) => (
             <button
               key={t}
               onClick={() => setTab(t)}
-              className={`h-11 px-5 border-none bg-transparent text-[11px] font-semibold tracking-[.12em] uppercase border-b-2 mb-[-1px] transition-colors ${
+              className={`h-11 px-5 border-none bg-transparent text-[11px] font-sans font-semibold tracking-[.12em] uppercase border-b-2 mb-[-1px] transition-colors ${
                 tab === t
-                  ? "text-[#111] border-[#111]"
-                  : "text-[#999] border-transparent hover:text-[#111]"
+                  ? "text-[#1a4a8a] border-[#1a4a8a]"
+                  : "text-[#6b88aa] border-transparent hover:text-[#1a4a8a]"
               }`}
             >
               {t.charAt(0).toUpperCase() + t.slice(1)}
@@ -104,44 +115,31 @@ export function ListPropertyModal({ open, onClose }: ListPropertyModalProps) {
           ))}
         </div>
 
-        <div className="px-7 py-7 flex flex-col gap-4 max-h-[68vh] overflow-y-auto">
+        {/* Body */}
+        <div className="px-7 py-6 flex flex-col gap-4 max-h-[62vh] overflow-y-auto">
           {tab === "details" && (
             <>
               <div className="flex flex-col gap-[6px]">
-                <label className="text-[10px] font-semibold tracking-[.14em] uppercase text-[#888]">
-                  Street address *
-                </label>
+                <label className={labelClass}>Street address *</label>
                 <input
                   value={addr}
                   onChange={(e) => setAddr(e.target.value)}
                   placeholder="e.g. 42 Elm Street, Piscataway, NJ"
-                  className="h-10 border border-[#ddd] px-[14px] text-[13px] text-[#111] outline-none focus:border-[#111] transition-colors"
+                  className={inputClass + " w-full"}
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-[14px]">
                 <div className="flex flex-col gap-[6px]">
-                  <label className="text-[10px] font-semibold tracking-[.14em] uppercase text-[#888]">
-                    Listing type *
-                  </label>
-                  <select
-                    value={mode}
-                    onChange={(e) => setMode(e.target.value)}
-                    className="h-10 border border-[#ddd] px-[14px] text-[13px] text-[#111] outline-none focus:border-[#111] transition-colors bg-white"
-                  >
+                  <label className={labelClass}>Listing type *</label>
+                  <select value={mode} onChange={(e) => setMode(e.target.value)} className={inputClass + " bg-white w-full"}>
                     <option value="buy">For sale</option>
                     <option value="rent">For rent</option>
                   </select>
                 </div>
                 <div className="flex flex-col gap-[6px]">
-                  <label className="text-[10px] font-semibold tracking-[.14em] uppercase text-[#888]">
-                    Property type *
-                  </label>
-                  <select
-                    value={propType}
-                    onChange={(e) => setPropType(e.target.value)}
-                    className="h-10 border border-[#ddd] px-[14px] text-[13px] text-[#111] outline-none focus:border-[#111] transition-colors bg-white"
-                  >
+                  <label className={labelClass}>Property type *</label>
+                  <select value={propType} onChange={(e) => setPropType(e.target.value)} className={inputClass + " bg-white w-full"}>
                     <option value="House">House</option>
                     <option value="Condo">Condo</option>
                     <option value="Townhouse">Townhouse</option>
@@ -151,16 +149,14 @@ export function ListPropertyModal({ open, onClose }: ListPropertyModalProps) {
               </div>
 
               <div className="flex flex-col gap-[6px]">
-                <label className="text-[10px] font-semibold tracking-[.14em] uppercase text-[#888]">
-                  Price *
-                </label>
+                <label className={labelClass}>Price *</label>
                 <input
                   value={price}
                   onChange={(e) => setPrice(e.target.value)}
                   placeholder="e.g. $450,000 or $2,200/mo"
-                  className="h-10 border border-[#ddd] px-[14px] text-[13px] text-[#111] outline-none focus:border-[#111] transition-colors"
+                  className={inputClass + " w-full"}
                 />
-                <span className="text-[11px] text-[#aaa]">For rentals include /mo — e.g. $2,200/mo</span>
+                <span className="text-[11px] font-sans text-blue-400">For rentals include /mo — e.g. $2,200/mo</span>
               </div>
 
               <div className="grid grid-cols-3 gap-[14px]">
@@ -170,23 +166,23 @@ export function ListPropertyModal({ open, onClose }: ListPropertyModalProps) {
                   { label: "Sq ft *", value: sqft, set: setSqft, placeholder: "1500" },
                 ].map((field) => (
                   <div key={field.label} className="flex flex-col gap-[6px]">
-                    <label className="text-[10px] font-semibold tracking-[.14em] uppercase text-[#888]">
-                      {field.label}
-                    </label>
+                    <label className={labelClass}>{field.label}</label>
                     <input
                       type="number"
                       value={field.value}
                       onChange={(e) => field.set(e.target.value)}
                       placeholder={field.placeholder}
                       min="0"
-                      className="h-10 border border-[#ddd] px-[14px] text-[13px] text-[#111] outline-none focus:border-[#111] transition-colors"
+                      className={inputClass + " w-full"}
                     />
                   </div>
                 ))}
               </div>
 
               {error && (
-                <div className="text-[12px] text-[#c0392b]">{error}</div>
+                <div className="text-[12px] font-sans text-red-600 bg-red-50 px-3 py-2 border border-red-200">
+                  {error}
+                </div>
               )}
             </>
           )}
@@ -196,7 +192,7 @@ export function ListPropertyModal({ open, onClose }: ListPropertyModalProps) {
               {photos.length < 9 && (
                 <div
                   onClick={() => fileRef.current?.click()}
-                  className="border-2 border-dashed border-[#ddd] p-8 text-center cursor-pointer hover:border-[#111] hover:bg-[#fafafa] transition-colors"
+                  className="border-2 border-dashed border-blue-200 p-8 text-center cursor-pointer hover:border-[#1a4a8a] hover:bg-[#f0f5ff] transition-colors"
                 >
                   <input
                     ref={fileRef}
@@ -206,20 +202,20 @@ export function ListPropertyModal({ open, onClose }: ListPropertyModalProps) {
                     className="hidden"
                     onChange={handlePhotoUpload}
                   />
-                  <div className="text-[12px] font-semibold tracking-[.1em] uppercase text-[#555] mb-1">
+                  <div className="text-[12px] font-sans font-semibold tracking-[.1em] uppercase text-[#1a4a8a] mb-1">
                     Upload photos
                   </div>
-                  <div className="text-[11px] text-[#aaa]">Click to select images (JPG, PNG, WEBP)</div>
+                  <div className="text-[11px] font-sans text-blue-400">Click to select images (JPG, PNG, WEBP)</div>
                 </div>
               )}
               {photos.length > 0 && (
                 <div className="grid grid-cols-3 gap-2">
                   {photos.map((src, i) => (
-                    <div key={i} className="relative aspect-[4/3] border border-[#e8e8e8] overflow-hidden">
+                    <div key={i} className="relative aspect-[4/3] border border-blue-100 overflow-hidden">
                       <img src={src} alt={`Property photo ${i + 1}`} className="w-full h-full object-cover" />
                       <button
                         onClick={() => setPhotos((prev) => prev.filter((_, j) => j !== i))}
-                        className="absolute top-1 right-1 bg-black/60 text-white w-[22px] h-[22px] rounded-full text-[13px] flex items-center justify-center leading-none"
+                        className="absolute top-1 right-1 bg-[#1a4a8a]/80 text-white w-[22px] h-[22px] rounded-full text-[13px] flex items-center justify-center leading-none hover:bg-[#0f2d56]"
                       >
                         &times;
                       </button>
@@ -231,17 +227,18 @@ export function ListPropertyModal({ open, onClose }: ListPropertyModalProps) {
           )}
         </div>
 
-        <div className="px-7 py-[18px] border-t border-[#e8e8e8] flex gap-[10px] justify-end">
+        {/* Footer */}
+        <div className="px-7 py-[18px] border-t border-blue-100 flex gap-[10px] justify-end bg-[#f8faff]">
           <button
             onClick={handleClose}
-            className="h-[38px] px-[22px] border border-[#ddd] bg-transparent text-[#888] text-[11px] font-medium hover:border-[#999] hover:text-[#111] transition-colors"
+            className="h-[38px] px-[22px] border border-blue-200 bg-transparent text-[#3a6199] text-[11px] font-sans font-medium hover:border-[#1a4a8a] hover:text-[#0f2d56] transition-colors"
           >
             Cancel
           </button>
           <button
             onClick={handleSubmit}
             disabled={createProperty.isPending}
-            className="h-[38px] px-[26px] bg-[#111] text-white text-[11px] font-semibold tracking-[.1em] uppercase hover:bg-[#333] transition-colors disabled:opacity-60"
+            className="h-[38px] px-[26px] bg-[#1a4a8a] text-white text-[11px] font-sans font-semibold tracking-[.1em] uppercase hover:bg-[#0f2d56] transition-colors disabled:opacity-60"
           >
             {createProperty.isPending ? "Adding..." : "Add listing"}
           </button>

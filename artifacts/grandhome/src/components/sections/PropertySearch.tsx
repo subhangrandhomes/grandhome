@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useListProperties, getListPropertiesQueryKey } from "@workspace/api-client-react";
 import { PropertyCard } from "@/components/properties/PropertyCard";
 
@@ -34,26 +34,27 @@ export function PropertySearch() {
     });
   };
 
-  useEffect(() => {
-    if (!type && !maxPrice) return;
-    handleSearch();
-  }, [type, maxPrice]);
+  const selectClass =
+    "h-[40px] border border-blue-200 px-3 text-[13px] font-sans text-[#0f2d56] bg-white outline-none focus:border-[#1a4a8a] transition-colors";
 
   return (
-    <section className="bg-[#f9f9f9] px-20 py-12" id="contact">
-      <h3 className="font-serif text-[22px] font-medium tracking-[.06em] text-center mb-7">
-        Find Your Property
-      </h3>
+    <section className="bg-[#f0f5ff] px-20 py-14" id="contact">
+      <div className="text-center mb-8">
+        <p className="text-[10px] font-sans font-semibold tracking-[.3em] uppercase text-[#3a7bd5] mb-2">
+          Search
+        </p>
+        <h3 className="font-serif text-[30px] font-semibold text-[#0f2d56]">
+          Find Your Property
+        </h3>
+        <div className="w-10 h-[2px] bg-[#3a7bd5] mx-auto mt-3" />
+      </div>
+
       <div className="grid gap-[10px] items-end" style={{ gridTemplateColumns: "1fr 1fr 1fr 1fr auto" }}>
-        <div className="flex flex-col gap-[5px]">
-          <label className="text-[10px] font-semibold tracking-[.14em] uppercase text-[#888]">
+        <div className="flex flex-col gap-[6px]">
+          <label className="text-[10px] font-sans font-semibold tracking-[.14em] uppercase text-[#3a6199]">
             Bedrooms
           </label>
-          <select
-            value={beds}
-            onChange={(e) => setBeds(e.target.value)}
-            className="h-[38px] border border-[#ddd] px-3 text-[13px] text-[#111] bg-white outline-none focus:border-[#111] transition-colors"
-          >
+          <select value={beds} onChange={(e) => setBeds(e.target.value)} className={selectClass}>
             <option value="">Any</option>
             <option value="1">1+</option>
             <option value="2">2+</option>
@@ -61,8 +62,8 @@ export function PropertySearch() {
             <option value="4">4+</option>
           </select>
         </div>
-        <div className="flex flex-col gap-[5px]">
-          <label className="text-[10px] font-semibold tracking-[.14em] uppercase text-[#888]">
+        <div className="flex flex-col gap-[6px]">
+          <label className="text-[10px] font-sans font-semibold tracking-[.14em] uppercase text-[#3a6199]">
             Location
           </label>
           <input
@@ -71,18 +72,14 @@ export function PropertySearch() {
             onChange={(e) => setSearch(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSearch()}
             placeholder="City or ZIP"
-            className="h-[38px] border border-[#ddd] px-3 text-[13px] text-[#111] bg-white outline-none focus:border-[#111] transition-colors"
+            className={selectClass + " placeholder:text-blue-300"}
           />
         </div>
-        <div className="flex flex-col gap-[5px]">
-          <label className="text-[10px] font-semibold tracking-[.14em] uppercase text-[#888]">
+        <div className="flex flex-col gap-[6px]">
+          <label className="text-[10px] font-sans font-semibold tracking-[.14em] uppercase text-[#3a6199]">
             Property type
           </label>
-          <select
-            value={type}
-            onChange={(e) => setType(e.target.value)}
-            className="h-[38px] border border-[#ddd] px-3 text-[13px] text-[#111] bg-white outline-none focus:border-[#111] transition-colors"
-          >
+          <select value={type} onChange={(e) => setType(e.target.value)} className={selectClass}>
             <option value="">Any</option>
             <option value="House">House</option>
             <option value="Condo">Condo</option>
@@ -90,15 +87,11 @@ export function PropertySearch() {
             <option value="Apartment">Apartment</option>
           </select>
         </div>
-        <div className="flex flex-col gap-[5px]">
-          <label className="text-[10px] font-semibold tracking-[.14em] uppercase text-[#888]">
+        <div className="flex flex-col gap-[6px]">
+          <label className="text-[10px] font-sans font-semibold tracking-[.14em] uppercase text-[#3a6199]">
             Max price
           </label>
-          <select
-            value={maxPrice}
-            onChange={(e) => setMaxPrice(e.target.value)}
-            className="h-[38px] border border-[#ddd] px-3 text-[13px] text-[#111] bg-white outline-none focus:border-[#111] transition-colors"
-          >
+          <select value={maxPrice} onChange={(e) => setMaxPrice(e.target.value)} className={selectClass}>
             <option value="">Any</option>
             <option value="300">$300K</option>
             <option value="500">$500K</option>
@@ -108,7 +101,7 @@ export function PropertySearch() {
         </div>
         <button
           onClick={handleSearch}
-          className="h-[38px] px-7 bg-[#111] text-white text-[10px] font-semibold tracking-[.16em] uppercase whitespace-nowrap hover:bg-[#333] transition-colors"
+          className="h-[40px] px-7 bg-[#1a4a8a] text-white text-[10px] font-sans font-semibold tracking-[.16em] uppercase whitespace-nowrap hover:bg-[#0f2d56] transition-colors"
         >
           Search
         </button>
@@ -118,7 +111,7 @@ export function PropertySearch() {
         {isLoading ? (
           <div className="grid grid-cols-3 gap-[3px]">
             {Array.from({ length: 3 }).map((_, i) => (
-              <div key={i} className="aspect-[4/3] bg-gray-200 animate-pulse" />
+              <div key={i} className="aspect-[4/3] bg-blue-100 animate-pulse" />
             ))}
           </div>
         ) : properties && properties.length > 0 ? (
@@ -128,7 +121,7 @@ export function PropertySearch() {
             ))}
           </div>
         ) : (
-          <div className="text-center py-16 text-[13px] text-[#999] tracking-[.08em]">
+          <div className="text-center py-16 text-[13px] font-sans text-[#6b88aa] tracking-[.08em]">
             No properties match your search.
           </div>
         )}

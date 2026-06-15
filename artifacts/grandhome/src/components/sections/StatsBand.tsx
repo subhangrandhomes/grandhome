@@ -11,14 +11,14 @@ export function StatsBand() {
   ];
 
   return (
-    <div className="bg-[#3a3a3a] text-white grid grid-cols-4">
+    <div className="grid grid-cols-4" style={{ background: "linear-gradient(90deg, #0f2d56 0%, #1a4a8a 100%)" }}>
       {items.map((item, i) => (
         <div
           key={i}
-          className="py-11 px-5 text-center border-r border-white/10 last:border-r-0"
+          className="py-12 px-5 text-center border-r border-white/10 last:border-r-0"
         >
-          <div className="font-serif text-[42px] font-medium leading-none mb-2">{item.num}</div>
-          <div className="text-[10px] font-medium tracking-[.18em] uppercase text-[#aaa]">
+          <div className="font-serif text-[44px] font-semibold leading-none mb-2 text-white">{item.num}</div>
+          <div className="text-[10px] font-sans font-medium tracking-[.2em] uppercase text-blue-200">
             {item.label}
           </div>
         </div>
