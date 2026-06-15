@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "Grandhome Investments"
+version = "1.0.0"
+id = "artifacts/grandhome"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 19947
+
+[services.development]
+run = "pnpm --filter @workspace/grandhome run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/grandhome", "run", "build" ]
+publicDir = "artifacts/grandhome/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "19947"
+BASE_PATH = "/"

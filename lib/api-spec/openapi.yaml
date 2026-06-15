@@ -3,13 +3,15 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: Grandhome Investments Real Estate API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: properties
+    description: Property listing operations
 paths:
   /healthz:
     get:
@@ -24,6 +26,151 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /properties:
+    get:
+      operationId: listProperties
+      tags: [properties]
+      summary: List all properties
+      description: Returns all property listings with optional filtering
+      parameters:
+        - name: beds
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: Minimum number of bedrooms
+        - name: type
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Property type (House, Condo, Townhouse, Apartment)
+        - name: mode
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Listing mode (buy, rent)
+        - name: maxPrice
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: Maximum price in thousands (e.g. 500 = $500K)
+        - name: search
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Search by address or name
+      responses:
+        "200":
+          description: List of properties
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Property"
+    post:
+      operationId: createProperty
+      tags: [properties]
+      summary: Create a new property listing
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PropertyInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Property"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /properties/stats:
+    get:
+      operationId: getPropertyStats
+      tags: [properties]
+      summary: Get aggregate listing statistics
+      description: Returns counts and summary stats for the dashboard
+      responses:
+        "200":
+          description: Property statistics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PropertyStats"
+
+  /properties/featured:
+    get:
+      operationId: getFeaturedProperties
+      tags: [properties]
+      summary: Get featured property listings
+      description: Returns the 6 most recent listings for the hero display
+      responses:
+        "200":
+          description: Featured properties
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Property"
+
+  /properties/{id}:
+    get:
+      operationId: getProperty
+      tags: [properties]
+      summary: Get a property by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Property details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Property"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      operationId: deleteProperty
+      tags: [properties]
+      summary: Delete a property listing
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +181,112 @@ components:
       required:
         - status
 
+    Property:
+      type: object
+      required:
+        - id
+        - name
+        - address
+        - price
+        - beds
+        - baths
+        - sqft
+        - type
+        - mode
+        - tag
+        - photos
+        - createdAt
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        address:
+          type: string
+        price:
+          type: string
+          description: Display price string (e.g. "$389,000" or "$2,200/mo")
+        priceValue:
+          type: ["integer", "null"]
+          description: Numeric price for filtering
+        beds:
+          type: integer
+        baths:
+          type: integer
+        sqft:
+          type: integer
+        type:
+          type: string
+          description: "House | Condo | Townhouse | Apartment"
+        mode:
+          type: string
+          description: "buy | rent"
+        tag:
+          type: string
+          description: "New | Sale | Rent"
+        photos:
+          type: array
+          items:
+            type: string
+          description: Array of base64 data URLs or image URLs
+        createdAt:
+          type: string
+          format: date-time
+
+    PropertyInput:
+      type: object
+      required:
+        - address
+        - price
+        - beds
+        - baths
+        - sqft
+        - type
+        - mode
+      properties:
+        address:
+          type: string
+        price:
+          type: string
+        beds:
+          type: integer
+        baths:
+          type: integer
+        sqft:
+          type: integer
+        type:
+          type: string
+        mode:
+          type: string
+        photos:
+          type: array
+          items:
+            type: string
+
+    PropertyStats:
+      type: object
+      required:
+        - totalListings
+        - forSale
+        - forRent
+        - avgPrice
+        - newListings
+      properties:
+        totalListings:
+          type: integer
+        forSale:
+          type: integer
+        forRent:
+          type: integer
+        avgPrice:
+          type: ["integer", "null"]
+        newListings:
+          type: integer
+
+    ErrorResponse:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: string

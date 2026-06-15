@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Grandhome Investments</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Montserrat',sans-serif;color:#1a1a1a;background:#fff;font-size:14px;}
+a{text-decoration:none;color:inherit;}
+button{cursor:pointer;font-family:inherit;}
+input,select,textarea{font-family:inherit;}
+img{display:block;width:100%;}
+
+/* ── Top bar ── */
+.topbar{background:#111;color:#aaa;font-size:11px;letter-spacing:.04em;padding:7px 40px;display:flex;align-items:center;justify-content:space-between;}
+.topbar a{color:#aaa;}
+.topbar a:hover{color:#fff;}
+.topbar-left{display:flex;gap:24px;}
+.topbar-right{display:flex;gap:14px;font-size:13px;}
+
+/* ── Logo bar ── */
+.logobar{background:#fff;padding:18px 40px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #e8e8e8;}
+.logo-wrap{display:flex;align-items:center;gap:20px;}
+.logo-emblem{width:64px;height:64px;border:2px solid #111;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.logo-emblem span{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;letter-spacing:-.02em;}
+.logo-wordmark{display:flex;flex-direction:column;line-height:1;}
+.logo-wordmark .brand{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;}
+.logo-wordmark .tagline{font-size:9px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:#888;margin-top:4px;}
+.logo-divider{width:1px;height:48px;background:#ccc;}
+.logo-luxury{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:400;letter-spacing:.18em;text-transform:uppercase;color:#555;}
+.logobar-right{display:flex;gap:12px;}
+.btn-outline{height:36px;padding:0 22px;border:1px solid #111;background:transparent;color:#111;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;transition:background .2s,color .2s;}
+.btn-outline:hover{background:#111;color:#fff;}
+.btn-solid{height:36px;padding:0 22px;border:1px solid #111;background:#111;color:#fff;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;transition:background .2s;}
+.btn-solid:hover{background:#333;}
+
+/* ── Nav ── */
+.mainnav{background:#fff;border-bottom:1px solid #e8e8e8;position:sticky;top:0;z-index:100;}
+.mainnav ul{display:flex;justify-content:center;gap:40px;list-style:none;padding:0 40px;height:44px;align-items:center;}
+.mainnav ul li a{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#444;transition:color .15s;}
+.mainnav ul li a:hover,.mainnav ul li a.active{color:#111;border-bottom:1px solid #111;padding-bottom:2px;}
+
+/* ── Hero ── */
+.hero{position:relative;height:380px;overflow:hidden;display:flex;align-items:center;justify-content:center;text-align:center;}
+.hero-bg{position:absolute;inset:0;background:linear-gradient(160deg,#c9d8e8 0%,#8fa8bf 40%,#5c7a94 100%);}
+.hero-overlay{position:absolute;inset:0;background:rgba(20,35,50,.38);}
+.hero-content{position:relative;z-index:2;color:#fff;}
+.hero-content h1{font-family:'Cormorant Garamond',serif;font-size:52px;font-weight:500;letter-spacing:.04em;line-height:1.1;margin-bottom:8px;}
+.hero-content p{font-size:12px;font-weight:400;letter-spacing:.2em;text-transform:uppercase;opacity:.85;margin-bottom:28px;}
+.hero-btns{display:flex;gap:14px;justify-content:center;}
+.hero-btn{height:40px;padding:0 28px;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;border:1px solid rgba(255,255,255,.8);background:rgba(255,255,255,.15);color:#fff;transition:background .2s;}
+.hero-btn:hover{background:rgba(255,255,255,.3);}
+.hero-btn.filled{background:#fff;color:#111;border-color:#fff;}
+.hero-btn.filled:hover{background:#e8e8e8;}
+
+/* ── Section label ── */
+.section-label{text-align:center;padding:48px 0 32px;}
+.section-label h2{font-family:'Cormorant Garamond',serif;font-size:13px;font-weight:600;letter-spacing:.28em;text-transform:uppercase;color:#111;}
+.section-label .rule{width:40px;height:1px;background:#111;margin:10px auto 0;}
+
+/* ── Featured listings grid ── */
+.listings-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:3px;padding:0 0 12px;}
+.listing-card{position:relative;overflow:hidden;cursor:pointer;aspect-ratio:4/3;}
+.listing-card .card-photo{width:100%;height:100%;object-fit:cover;background:#ccc;display:flex;align-items:center;justify-content:center;font-size:56px;transition:transform .4s ease;}
+.listing-card:hover .card-photo{transform:scale(1.04);}
+.listing-card .card-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.65) 0%,transparent 55%);}
+.listing-card .card-info{position:absolute;bottom:0;left:0;right:0;padding:16px 18px;color:#fff;}
+.listing-card .card-info .card-name{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:500;margin-bottom:2px;}
+.listing-card .card-info .card-price{font-size:11px;font-weight:500;letter-spacing:.1em;opacity:.88;}
+.listing-card .card-info .card-meta{font-size:10px;opacity:.75;margin-top:2px;letter-spacing:.04em;}
+.listing-card .card-badge{position:absolute;top:14px;left:14px;background:rgba(0,0,0,.55);color:#fff;font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;padding:4px 10px;}
+/* delete btn on hover */
+.listing-card .card-delete{position:absolute;top:12px;right:12px;background:rgba(180,30,30,.85);color:#fff;border:none;font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:5px 10px;opacity:0;transition:opacity .2s;}
+.listing-card:hover .card-delete{opacity:1;}
+
+.view-all-wrap{text-align:center;padding:16px 0 40px;}
+.btn-view-all{display:inline-block;height:38px;padding:0 36px;border:1px solid #111;background:transparent;color:#111;font-size:10px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;transition:background .2s,color .2s;line-height:38px;}
+.btn-view-all:hover{background:#111;color:#fff;}
+
+/* ── Trust section ── */
+.trust-section{display:grid;grid-template-columns:1fr 1fr;min-height:320px;}
+.trust-photo{background:linear-gradient(135deg,#b0bec5,#78909c);display:flex;align-items:center;justify-content:center;font-size:80px;overflow:hidden;}
+.trust-content{background:#f5f5f5;padding:56px 52px;display:flex;flex-direction:column;justify-content:center;}
+.trust-content .eyebrow{font-size:10px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:#888;margin-bottom:14px;}
+.trust-content h2{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:500;line-height:1.15;margin-bottom:16px;}
+.trust-content p{font-size:13px;line-height:1.8;color:#555;margin-bottom:24px;}
+.btn-team{display:inline-block;height:38px;padding:0 28px;border:1px solid #111;background:transparent;color:#111;font-size:10px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;transition:background .2s,color .2s;line-height:38px;}
+.btn-team:hover{background:#111;color:#fff;}
+
+/* ── Stats band ── */
+.stats-band{background:#3a3a3a;color:#fff;display:grid;grid-template-columns:repeat(4,1fr);}
+.stat-block{padding:44px 20px;text-align:center;border-right:1px solid rgba(255,255,255,.1);}
+.stat-block:last-child{border-right:none;}
+.stat-block .stat-num{font-family:'Cormorant Garamond',serif;font-size:42px;font-weight:500;line-height:1;margin-bottom:8px;}
+.stat-block .stat-lbl{font-size:10px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:#aaa;}
+
+/* ── Contact form strip ── */
+.contact-strip{background:#f9f9f9;padding:48px 80px;}
+.contact-strip h3{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;letter-spacing:.06em;text-align:center;margin-bottom:28px;}
+.contact-form{display:grid;grid-template-columns:repeat(4,1fr) auto;gap:10px;align-items:end;}
+.form-group{display:flex;flex-direction:column;gap:5px;}
+.form-group label{font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#888;}
+.form-group input,.form-group select{height:38px;border:1px solid #ddd;padding:0 12px;font-size:13px;color:#111;background:#fff;outline:none;border-radius:0;transition:border-color .15s;}
+.form-group input:focus,.form-group select:focus{border-color:#111;}
+.btn-contact{height:38px;padding:0 28px;background:#111;color:#fff;border:none;font-size:10px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;white-space:nowrap;transition:background .2s;}
+.btn-contact:hover{background:#333;}
+
+/* ── CTA strip ── */
+.cta-strip{background:#c0392b;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:22px 80px;}
+.cta-strip .cta-text{font-size:13px;font-weight:500;letter-spacing:.06em;}
+.cta-strip .cta-phone{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;letter-spacing:.02em;}
+.btn-cta{height:38px;padding:0 26px;border:1px solid rgba(255,255,255,.7);background:transparent;color:#fff;font-size:10px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;transition:background .2s;}
+.btn-cta:hover{background:rgba(255,255,255,.2);}
+
+/* ── Footer ── */
+footer{background:#222;color:#aaa;padding:48px 80px 32px;}
+.footer-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:48px;margin-bottom:36px;}
+.footer-col h4{font-size:10px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#fff;margin-bottom:16px;}
+.footer-col p,.footer-col address{font-size:12px;line-height:1.9;color:#888;font-style:normal;}
+.footer-col a{color:#888;transition:color .15s;}
+.footer-col a:hover{color:#fff;}
+.footer-bottom{border-top:1px solid #333;padding-top:20px;font-size:11px;color:#555;display:flex;justify-content:space-between;}
+.social-links{display:flex;gap:16px;margin-top:14px;}
+.social-links a{font-size:13px;color:#888;}
+.social-links a:hover{color:#fff;}
+
+/* ============================================================
+   MODAL
+============================================================ */
+.modal-overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.55);align-items:center;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal{background:#fff;width:100%;max-width:540px;margin:16px;}
+.modal-header{display:flex;align-items:center;justify-content:space-between;padding:20px 28px;border-bottom:1px solid #e8e8e8;}
+.modal-header h2{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;letter-spacing:.04em;}
+.modal-close{background:none;border:none;font-size:22px;color:#999;line-height:1;padding:2px 6px;}
+.modal-close:hover{color:#111;}
+.modal-body{padding:28px;display:flex;flex-direction:column;gap:16px;max-height:68vh;overflow-y:auto;}
+.modal-footer{padding:18px 28px;border-top:1px solid #e8e8e8;display:flex;gap:10px;justify-content:flex-end;}
+.mfield{display:flex;flex-direction:column;gap:6px;}
+.mfield label{font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#888;}
+.mfield input,.mfield select{height:40px;border:1px solid #ddd;padding:0 14px;font-size:13px;color:#111;outline:none;transition:border-color .15s;}
+.mfield input:focus,.mfield select:focus{border-color:#111;}
+.mfield-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.mfield-row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+.mfield .hint{font-size:11px;color:#aaa;}
+.btn-mcancel{height:38px;padding:0 22px;border:1px solid #ddd;background:transparent;color:#888;font-size:11px;font-weight:500;}
+.btn-mcancel:hover{border-color:#999;color:#111;}
+.btn-msubmit{height:38px;padding:0 26px;border:none;background:#111;color:#fff;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;transition:background .2s;}
+.btn-msubmit:hover{background:#333;}
+.merror{font-size:12px;color:#c0392b;display:none;}
+
+/* Modal tabs */
+.modal-tabs{display:flex;border-bottom:1px solid #e8e8e8;padding:0 28px;}
+.modal-tab{height:44px;padding:0 20px;border:none;background:transparent;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#999;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .15s,border-color .15s;}
+.modal-tab.active{color:#111;border-bottom-color:#111;}
+.modal-tab:hover{color:#111;}
+.tab-panel{display:none;}
+.tab-panel.active{display:flex;flex-direction:column;gap:16px;}
+/* Photo upload area */
+.photo-drop{border:2px dashed #ddd;padding:32px 20px;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;}
+.photo-drop:hover{border-color:#111;background:#fafafa;}
+.photo-drop input{display:none;}
+.photo-drop .drop-icon{font-size:32px;margin-bottom:8px;}
+.photo-drop .drop-label{font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#555;margin-bottom:4px;}
+.photo-drop .drop-hint{font-size:11px;color:#aaa;}
+.photo-preview-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.photo-thumb{position:relative;aspect-ratio:4/3;border:1px solid #e8e8e8;overflow:hidden;}
+.photo-thumb img{width:100%;height:100%;object-fit:cover;}
+.photo-thumb .thumb-del{position:absolute;top:4px;right:4px;background:rgba(0,0,0,.6);color:#fff;border:none;width:22px;height:22px;border-radius:50%;font-size:13px;line-height:1;display:flex;align-items:center;justify-content:center;}
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(60px);background:#111;color:#fff;padding:10px 24px;font-size:12px;font-weight:500;letter-spacing:.06em;z-index:300;transition:transform .25s,opacity .25s;opacity:0;}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+</style>
+</head>
+<body>
+
+<!-- ── Top bar ── -->
+<div class="topbar">
+  <div class="topbar-left">
+    <span>CALL US TODAY: +1 800 555 0199</span>
+    <a href="mailto:info@grandhomeinvestments.com">info@grandhomeinvestments.com</a>
+  </div>
+  <div class="topbar-right">
+    <a href="#">&#x2665;</a>
+    <a href="#">&#x1F4F7;</a>
+    <a href="#">&#x1F310;</a>
+  </div>
+</div>
+
+<!-- ── Logo bar ── -->
+<div class="logobar">
+  <div class="logo-wrap">
+    <div class="logo-emblem"><span>GI</span></div>
+    <div class="logo-wordmark">
+      <span class="brand">Grandhome</span>
+      <span class="tagline">Investments &nbsp;&bull;&nbsp; Real Estate Group</span>
+    </div>
+    <div class="logo-divider"></div>
+    <div class="logo-luxury">Luxury</div>
+  </div>
+  <div class="logobar-right">
+    <button class="btn-outline" onclick="openModal()">+ List property</button>
+    <button class="btn-solid">Contact us</button>
+  </div>
+</div>
+
+<!-- ── Nav ── -->
+<div class="mainnav">
+  <ul>
+    <li><a href="#" class="active">Home</a></li>
+    <li><a href="#listings">Our listings</a></li>
+    <li><a href="#">Buy</a></li>
+    <li><a href="#about">About us</a></li>
+    <li><a href="#">Reviews</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</div>
+
+<!-- ── Hero ── -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <h1>Grandhome Investments</h1>
+    <p>Your dream home awaits</p>
+    <div class="hero-btns">
+      <button class="hero-btn filled" onclick="document.getElementById('listings').scrollIntoView({behavior:'smooth'})">All properties</button>
+      <button class="hero-btn" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Search</button>
+    </div>
+  </div>
+</section>
+
+<!-- ── Featured listings ── -->
+<section id="listings">
+  <div class="section-label">
+    <h2>Featured Listings</h2>
+    <div class="rule"></div>
+  </div>
+  <div class="listings-grid" id="listingsGrid"></div>
+  <div class="view-all-wrap">
+    <a href="#" class="btn-view-all">View all</a>
+  </div>
+</section>
+
+<!-- ── Trust section ── -->
+<section class="trust-section" id="about">
+  <div class="trust-photo">🏡</div>
+  <div class="trust-content">
+    <div class="eyebrow">Who we are</div>
+    <h2>A Team You Can Trust</h2>
+    <p>We specialise in off-market new construction homes that help you find a full list of not-yet-listed properties. We treat every purchase and sale with the respect it deserves — ensuring that the price negotiated is fair for all parties. Our job is to get to know you, to understand your home and your family, and then meet all of your needs and desires. Our job is to make your dream come true.</p>
+    <a href="#" class="btn-team">Meet our team</a>
+  </div>
+</section>
+
+<!-- ── Stats band ── -->
+<div class="stats-band">
+  <div class="stat-block"><div class="stat-num" id="statSold">250+</div><div class="stat-lbl">Homes sold</div></div>
+  <div class="stat-block"><div class="stat-num">110%</div><div class="stat-lbl">Sale-to-list price ratio</div></div>
+  <div class="stat-block"><div class="stat-num" id="statDays">11</div><div class="stat-lbl">Avg. days on market</div></div>
+  <div class="stat-block"><div class="stat-num">$250M+</div><div class="stat-lbl">Total volume sold</div></div>
+</div>
+
+<!-- ── Contact form strip ── -->
+<section class="contact-strip" id="contact">
+  <h3>Find Your Property</h3>
+  <div class="contact-form">
+    <div class="form-group">
+      <label>Bedrooms</label>
+      <select id="bedsFilter" onchange="render()">
+        <option value="">Any</option>
+        <option value="1">1+</option>
+        <option value="2">2+</option>
+        <option value="3">3+</option>
+        <option value="4">4+</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Location</label>
+      <input type="text" id="searchInput" placeholder="City or ZIP" />
+    </div>
+    <div class="form-group">
+      <label>Property type</label>
+      <select id="typeFilter" onchange="render()">
+        <option value="">Any</option>
+        <option value="House">House</option>
+        <option value="Condo">Condo</option>
+        <option value="Townhouse">Townhouse</option>
+        <option value="Apartment">Apartment</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Max price</label>
+      <select id="priceFilter" onchange="render()">
+        <option value="">Any</option>
+        <option value="300">$300K</option>
+        <option value="500">$500K</option>
+        <option value="800">$800K</option>
+        <option value="1200">$1.2M</option>
+      </select>
+    </div>
+    <button class="btn-contact" onclick="render()">Search</button>
+  </div>
+</section>
+
+<!-- ── CTA strip ── -->
+<div class="cta-strip">
+  <div>
+    <div class="cta-text">Want to list or buy a property?</div>
+    <div class="cta-phone">+1 800 555 0199</div>
+  </div>
+  <button class="btn-cta" onclick="openModal()">List a property</button>
+</div>
+
+<!-- ── Footer ── -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-col">
+      <h4>Grandhome Investments</h4>
+      <p>Your trusted luxury real estate partner. We find, list, and sell premium properties with unmatched dedication to our clients.</p>
+      <div class="social-links">
+        <a href="#">FB</a>
+        <a href="#">IG</a>
+        <a href="#">LI</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Location</h4>
+      <address>
+        Suite 245<br>
+        53 Knightsbridge Rd<br>
+        Piscataway, NJ 08854
+      </address>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <p>
+        <a href="mailto:haroon.grandhomes@gmail.com">haroon.grandhomes@gmail.com</a><br>
+        <a href="tel:7325265695">732-526-5695</a><br><br>
+        <a href="mailto:aamirali@hotmail.com">aamirali@hotmail.com</a><br>
+        <a href="tel:7322334744">732-233-4744</a>
+      </p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 Grandhome Investments. All rights reserved.</span>
+    <div style="display:flex;gap:20px;"><a href="#">Privacy</a><a href="#">Terms</a></div>
+  </div>
+</footer>
+
+<!-- ── List property modal ── -->
+<div class="modal-overlay" id="modalOverlay" onclick="handleOverlayClick(event)">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-header">
+      <h2 id="modalTitle">List a property</h2>
+      <button class="modal-close" onclick="closeModal()" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-tabs">
+      <button class="modal-tab active" onclick="switchTab('details',this)">Details</button>
+      <button class="modal-tab" onclick="switchTab('photos',this)">Photos</button>
+    </div>
+    <div class="modal-body">
+      <!-- Details tab -->
+      <div class="tab-panel active" id="tab-details">
+        <div class="mfield">
+          <label>Street address *</label>
+          <input type="text" id="f-addr" placeholder="e.g. 42 Elm Street, Piscataway, NJ"/>
+        </div>
+        <div class="mfield-row">
+          <div class="mfield">
+            <label>Listing type *</label>
+            <select id="f-mode">
+              <option value="buy">For sale</option>
+              <option value="rent">For rent</option>
+            </select>
+          </div>
+          <div class="mfield">
+            <label>Property type *</label>
+            <select id="f-proptype">
+              <option value="House">House</option>
+              <option value="Condo">Condo</option>
+              <option value="Townhouse">Townhouse</option>
+              <option value="Apartment">Apartment</option>
+            </select>
+          </div>
+        </div>
+        <div class="mfield">
+          <label>Price *</label>
+          <input type="text" id="f-price" placeholder="e.g. $450,000 or $2,200/mo"/>
+          <span class="hint">For rentals include /mo — e.g. $2,200/mo</span>
+        </div>
+        <div class="mfield-row3">
+          <div class="mfield"><label>Bedrooms *</label><input type="number" id="f-beds" min="0" max="20" placeholder="3"/></div>
+          <div class="mfield"><label>Bathrooms *</label><input type="number" id="f-baths" min="0" max="20" placeholder="2"/></div>
+          <div class="mfield"><label>Sq ft *</label><input type="number" id="f-sqft" min="0" placeholder="1500"/></div>
+        </div>
+        <div class="merror" id="f-error"></div>
+      </div>
+
+      <!-- Photos tab -->
+      <div class="tab-panel" id="tab-photos">
+        <div class="photo-drop" onclick="document.getElementById('f-photos').click()" id="photoDrop">
+          <input type="file" id="f-photos" accept="image/*" multiple onchange="handlePhotoUpload(event)"/>
+          <div class="drop-icon">🖼️</div>
+          <div class="drop-label">Upload photos</div>
+          <div class="drop-hint">Click to select images (JPG, PNG, WEBP)</div>
+        </div>
+        <div class="photo-preview-grid" id="photoPreviewGrid"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-mcancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-msubmit" onclick="submitListing()">Add listing</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── Data ──────────────────────────────────────────────────────
+let properties = [
+  {id:1,  name:"Harlem Park New Construction",  price:"$389,000",  monthly:null, beds:3,baths:2,sqft:1640,type:"House",    mode:"buy", addr:"142 Maple St, Austin, TX",   tag:"New",  icon:"🏠",bg:"#c9d4d0",photos:[]},
+  {id:2,  name:"Manaher New Construction",      price:"$2,450/mo", monthly:2450, beds:2,baths:1,sqft:950, type:"Apartment",mode:"rent",addr:"88 Pine Ave, Austin, TX",    tag:"Rent", icon:"🏢",bg:"#cdd4d9",photos:[]},
+  {id:3,  name:"Edison New Construction",       price:"$625,000",  monthly:null, beds:4,baths:3,sqft:2200,type:"House",    mode:"buy", addr:"7 Oakwood Dr, Austin, TX",   tag:"Sale", icon:"🏡",bg:"#d4cfc9",photos:[]},
+  {id:4,  name:"Morristown New Construction",   price:"$299,000",  monthly:null, beds:2,baths:2,sqft:1100,type:"Condo",    mode:"buy", addr:"310 River Blvd, Austin, TX", tag:"New",  icon:"🏗",bg:"#c9cbd4",photos:[]},
+  {id:5,  name:"Millburn Modern Classic",       price:"$1,800/mo", monthly:1800, beds:1,baths:1,sqft:680, type:"Apartment",mode:"rent",addr:"55 Lake Rd, Austin, TX",     tag:"Rent", icon:"🏢",bg:"#d2cdd4",photos:[]},
+  {id:6,  name:"Madison Sophisticated Luxury",  price:"$750,000",  monthly:null, beds:5,baths:4,sqft:3100,type:"House",    mode:"buy", addr:"21 Sunset Blvd, Austin, TX", tag:"Sale", icon:"🏠",bg:"#cfd4c9",photos:[]},
+  {id:7,  name:"Birch Lane Townhouse",          price:"$445,000",  monthly:null, beds:3,baths:2,sqft:1800,type:"Townhouse",mode:"buy", addr:"9 Birch Ln, Austin, TX",     tag:"New",  icon:"🏘",bg:"#d4d0c9",photos:[]},
+  {id:8,  name:"Cedar Way Rental",              price:"$3,200/mo", monthly:3200, beds:3,baths:2,sqft:1500,type:"House",    mode:"rent",addr:"60 Cedar Way, Austin, TX",   tag:"Rent", icon:"🏡",bg:"#cac9d4",photos:[]},
+  {id:9,  name:"Elm Street Family Home",        price:"$530,000",  monthly:null, beds:4,baths:3,sqft:2050,type:"House",    mode:"buy", addr:"14 Elm St, Austin, TX",      tag:"Sale", icon:"🏠",bg:"#c9d4ce",photos:[]},
+  {id:10, name:"Market Street Condo",           price:"$215,000",  monthly:null, beds:2,baths:1,sqft:870, type:"Condo",    mode:"buy", addr:"200 Market St, Austin, TX",  tag:"Sale", icon:"🏗",bg:"#d0c9d4",photos:[]},
+  {id:11, name:"Harbor Drive Apartment",        price:"$2,100/mo", monthly:2100, beds:2,baths:2,sqft:1020,type:"Apartment",mode:"rent",addr:"33 Harbor Dr, Austin, TX",   tag:"Rent", icon:"🏢",bg:"#c9d0d4",photos:[]},
+  {id:12, name:"Summit Court Estate",           price:"$890,000",  monthly:null, beds:5,baths:4,sqft:3500,type:"House",    mode:"buy", addr:"5 Summit Ct, Austin, TX",    tag:"Sale", icon:"🏠",bg:"#d4cac9",photos:[]},
+];
+let nextId=13;
+const typeIcon={House:"🏠",Condo:"🏗",Townhouse:"🏘",Apartment:"🏢"};
+const typeBg  ={House:"#c9d4d0",Condo:"#c9cbd4",Townhouse:"#d4d0c9",Apartment:"#cdd4d9"};
+
+// pending photos for new listing being added
+let pendingPhotos = []; // array of data URLs
+
+// ── Tab switching ─────────────────────────────────────────────
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.modal-tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── Photo upload ──────────────────────────────────────────────
+function handlePhotoUpload(e) {
+  const files = Array.from(e.target.files);
+  files.forEach(file => {
+    const reader = new FileReader();
+    reader.onload = ev => {
+      pendingPhotos.push(ev.target.result);
+      renderPhotoPreview();
+    };
+    reader.readAsDataURL(file);
+  });
+  e.target.value = ''; // reset so same file can be re-added
+}
+
+function renderPhotoPreview() {
+  const grid = document.getElementById('photoPreviewGrid');
+  grid.innerHTML = '';
+  pendingPhotos.forEach((src, i) => {
+    const thumb = document.createElement('div');
+    thumb.className = 'photo-thumb';
+    thumb.innerHTML = `<img src="${src}" alt="Property photo ${i+1}"/>
+      <button class="thumb-del" onclick="removePhoto(${i})" title="Remove">&times;</button>`;
+    grid.appendChild(thumb);
+  });
+  const drop = document.getElementById('photoDrop');
+  drop.style.display = pendingPhotos.length >= 9 ? 'none' : 'block';
+}
+
+function removePhoto(i) {
+  pendingPhotos.splice(i, 1);
+  renderPhotoPreview();
+}
+
+// ── Render listings ───────────────────────────────────────────
+function render(){
+  const beds    =parseInt(document.getElementById('bedsFilter').value)||0;
+  const maxPrice=parseInt(document.getElementById('priceFilter').value)||Infinity;
+  const propType=document.getElementById('typeFilter').value;
+  const search  =document.getElementById('searchInput').value.toLowerCase();
+
+  const filtered=properties.filter(p=>{
+    if(beds && p.beds<beds) return false;
+    if(propType && p.type!==propType) return false;
+    if(search && !p.addr.toLowerCase().includes(search) && !p.name.toLowerCase().includes(search)) return false;
+    if(maxPrice!==Infinity && p.mode==='buy'){
+      const num=parseInt(p.price.replace(/[^0-9]/g,''));
+      if(num>maxPrice*1000) return false;
+    }
+    return true;
+  });
+
+  const grid=document.getElementById('listingsGrid');
+  grid.innerHTML='';
+  if(!filtered.length){
+    grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:60px 0;font-size:13px;color:#999;letter-spacing:.08em;">No properties match your search.</div>';
+    return;
+  }
+  filtered.forEach(p=>{
+    const tagLabel=p.tag==='Rent'?'For rent':p.tag==='New'?'New listing':'For sale';
+    const card=document.createElement('div');
+    card.className='listing-card';
+
+    // Use first uploaded photo if available, otherwise emoji placeholder
+    const photoHTML = p.photos && p.photos.length > 0
+      ? `<img src="${p.photos[0]}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;display:block;"/>`
+      : `<div class="card-photo" style="background:${p.bg};width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:56px;">${p.icon}</div>`;
+
+    // photo count badge if multiple photos
+    const photoCountHTML = p.photos && p.photos.length > 1
+      ? `<span style="position:absolute;bottom:52px;right:12px;background:rgba(0,0,0,.55);color:#fff;font-size:10px;font-weight:600;padding:3px 8px;letter-spacing:.06em;">📷 ${p.photos.length}</span>`
+      : '';
+
+    card.innerHTML=`
+      ${photoHTML}
+      <div class="card-overlay"></div>
+      <span class="card-badge">${tagLabel}</span>
+      <button class="card-delete" onclick="removeProperty(event,${p.id})">&#128465; Remove</button>
+      ${photoCountHTML}
+      <div class="card-info">
+        <div class="card-name">${p.name}</div>
+        <div class="card-price">${p.price}</div>
+        <div class="card-meta">${p.beds} bd &bull; ${p.baths} ba &bull; ${p.sqft.toLocaleString()} ft&sup2; &bull; ${p.type}</div>
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+
+// ── Remove listing ────────────────────────────────────────────
+function removeProperty(e,id){
+  e.stopPropagation();
+  const p=properties.find(x=>x.id===id);
+  if(!p||!confirm('Remove "'+p.name+'" from listings?')) return;
+  properties=properties.filter(x=>x.id!==id);
+  render();
+  showToast('Listing removed');
+}
+
+// ── Modal open / close ────────────────────────────────────────
+function openModal(){
+  document.getElementById('modalOverlay').classList.add('open');
+  document.getElementById('f-addr').focus();
+}
+function closeModal(){
+  document.getElementById('modalOverlay').classList.remove('open');
+  ['f-addr','f-price','f-beds','f-baths','f-sqft'].forEach(i=>document.getElementById(i).value='');
+  document.getElementById('f-mode').value='buy';
+  document.getElementById('f-proptype').value='House';
+  document.getElementById('f-error').style.display='none';
+  pendingPhotos=[];
+  renderPhotoPreview();
+  // reset to details tab
+  switchTab('details', document.querySelectorAll('.modal-tab')[0]);
+}
+function handleOverlayClick(e){if(e.target===document.getElementById('modalOverlay'))closeModal();}
+
+// ── Submit listing ────────────────────────────────────────────
+function submitListing(){
+  const addr =document.getElementById('f-addr').value.trim();
+  const price=document.getElementById('f-price').value.trim();
+  const mode =document.getElementById('f-mode').value;
+  const type =document.getElementById('f-proptype').value;
+  const beds =parseInt(document.getElementById('f-beds').value);
+  const baths=parseInt(document.getElementById('f-baths').value);
+  const sqft =parseInt(document.getElementById('f-sqft').value);
+  const err  =document.getElementById('f-error');
+  if(!addr||!price||isNaN(beds)||isNaN(baths)||isNaN(sqft)){
+    err.textContent='Please fill in all required fields.';
+    err.style.display='block';
+    // switch to details tab to show error
+    switchTab('details', document.querySelectorAll('.modal-tab')[0]);
+    return;
+  }
+  const addrShort=addr.split(',')[0];
+  properties.push({
+    id:nextId++,
+    name:addrShort+' — '+type,
+    price,
+    monthly:mode==='rent'?(parseInt(price.replace(/[^0-9]/g,''))||null):null,
+    beds,baths,sqft,type,mode,addr,
+    tag:mode==='rent'?'Rent':'New',
+    icon:typeIcon[type]||'🏠',
+    bg:typeBg[type]||'#cdd4d9',
+    photos:[...pendingPhotos],
+  });
+  closeModal();
+  render();
+  showToast('Property listed successfully!');
+}
+
+// ── Toast ─────────────────────────────────────────────────────
+function showToast(msg){
+  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+document.getElementById('searchInput').addEventListener('input',render);
+render();
+</script>
+</body>
+</html>
