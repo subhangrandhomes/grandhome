@@ -6,3 +6,9 @@ id = "3MjbW1Jzj-Rf3TxaSDshM"
 uri = "file://grandhome.tar.gz"
 type = "unspecified"
 title = "Grandhome Investments — Full Project"
+
+[[outputs]]
+id = "CVbn9cXSZIwJo85tBWpK7"
+uri = "file://grandhome-preview.tar.gz"
+type = "unspecified"
+title = "Grandhome Investments — HTML Preview"
