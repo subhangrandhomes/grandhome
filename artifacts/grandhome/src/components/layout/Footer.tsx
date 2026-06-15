@@ -3,13 +3,12 @@ export function Footer() {
     <footer style={{ background: "linear-gradient(180deg, #0f2d56 0%, #071a35 100%)" }} className="text-blue-200 px-20 pt-12 pb-8">
       <div className="grid grid-cols-3 gap-12 mb-9">
         <div>
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 border border-blue-400/50 rounded-full flex items-center justify-center flex-shrink-0">
-              <span className="font-serif text-[15px] font-semibold text-blue-300">GI</span>
-            </div>
-            <h4 className="text-[10px] font-sans font-semibold tracking-[.2em] uppercase text-white">
-              Grandhome Investments
-            </h4>
+          <div className="mb-4">
+            <img
+              src="/logo.png"
+              alt="Grand Homes — Residential Construction & Investments"
+              className="h-[100px] w-auto object-contain brightness-0 invert opacity-90"
+            />
           </div>
           <p className="text-[12px] font-sans leading-[1.9] text-blue-300">
             Your trusted luxury real estate partner. We find, list, and sell premium properties with
