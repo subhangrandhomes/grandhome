@@ -324,13 +324,17 @@ export function PropertyDetailModal({ property: initialProp, onClose }: Props) {
                 </div>
 
                 <div className="flex gap-3 mt-auto">
-                  <a
-                    href="#contact"
-                    onClick={onClose}
+                  <button
+                    onClick={() => {
+                      onClose();
+                      setTimeout(() => {
+                        document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
+                      }, 50);
+                    }}
                     className="flex-1 h-[40px] bg-[#1a4a8a] text-white text-[10px] font-sans font-semibold tracking-[.14em] uppercase hover:bg-[#0f2d56] transition-colors flex items-center justify-center"
                   >
                     Enquire
-                  </a>
+                  </button>
                   <button
                     onClick={openEdit}
                     className="h-[40px] px-5 border border-[#1a4a8a] text-[#1a4a8a] text-[10px] font-sans font-semibold tracking-[.1em] uppercase hover:bg-blue-50 transition-colors"
