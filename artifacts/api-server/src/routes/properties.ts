@@ -126,6 +126,68 @@ router.post("/properties", async (req, res) => {
   }
 });
 
+router.put("/properties/:id", async (req, res) => {
+  try {
+    const parsed = GetPropertyParams.safeParse({ id: Number(req.params.id) });
+    if (!parsed.success) {
+      res.status(400).json({ error: "Invalid id" });
+      return;
+    }
+
+    const body = req.body as {
+      address?: string; price?: string; beds?: number; baths?: number; sqft?: number;
+      type?: string; mode?: string; photos?: string[]; status?: string; basement?: string;
+      livableArea?: number; projectCost?: number; projectStartDate?: string;
+      projectCompletionDate?: string; soldPrice?: number;
+    };
+
+    const existing = await db.select().from(propertiesTable).where(eq(propertiesTable.id, parsed.data.id));
+    if (!existing[0]) {
+      res.status(404).json({ error: "Property not found" });
+      return;
+    }
+
+    const addrShort = (body.address ?? existing[0].address).split(",")[0];
+    const type = body.type ?? existing[0].type;
+    const name = `${addrShort} — ${type}`;
+    const mode = body.mode ?? existing[0].mode;
+    const price = body.price ?? existing[0].price;
+    const numStr = price.replace(/[^0-9]/g, "");
+    const priceValue = numStr ? parseInt(numStr, 10) : null;
+    const tag = mode === "rent" ? "Rent" : "New";
+
+    const [row] = await db
+      .update(propertiesTable)
+      .set({
+        name,
+        address: body.address ?? existing[0].address,
+        price,
+        priceValue,
+        beds: body.beds ?? existing[0].beds,
+        baths: body.baths ?? existing[0].baths,
+        sqft: body.sqft ?? existing[0].sqft,
+        type,
+        mode,
+        tag,
+        photos: body.photos !== undefined ? JSON.stringify(body.photos) : existing[0].photos,
+        status: body.status ?? existing[0].status,
+        basement: body.basement !== undefined ? body.basement : existing[0].basement,
+        livableArea: body.livableArea !== undefined ? body.livableArea : existing[0].livableArea,
+        projectCost: body.projectCost !== undefined ? body.projectCost : existing[0].projectCost,
+        projectStartDate: body.projectStartDate !== undefined ? body.projectStartDate : existing[0].projectStartDate,
+        projectCompletionDate: body.projectCompletionDate !== undefined ? body.projectCompletionDate : existing[0].projectCompletionDate,
+        soldPrice: body.soldPrice !== undefined ? body.soldPrice : existing[0].soldPrice,
+      })
+      .where(eq(propertiesTable.id, parsed.data.id))
+      .returning();
+
+    res.json(serialize(row));
+  } catch (err) {
+    req.log.error({ err }, "Failed to update property");
+    res.status(500).json({ error: "Failed to update property" });
+  }
+});
+
 router.get("/properties/:id", async (req, res) => {
   try {
     const parsed = GetPropertyParams.safeParse({ id: Number(req.params.id) });

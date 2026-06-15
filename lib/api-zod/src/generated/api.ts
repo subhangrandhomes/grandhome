@@ -120,6 +120,55 @@ export const GetFeaturedPropertiesResponse = zod.array(GetFeaturedPropertiesResp
 
 
 /**
+ * @summary Update a property listing
+ */
+export const UpdatePropertyParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const UpdatePropertyBody = zod.object({
+  "address": zod.string(),
+  "price": zod.string(),
+  "beds": zod.number(),
+  "baths": zod.number(),
+  "sqft": zod.number(),
+  "type": zod.string(),
+  "mode": zod.string(),
+  "photos": zod.array(zod.string()).optional(),
+  "status": zod.string().optional(),
+  "basement": zod.string().optional(),
+  "livableArea": zod.number().optional(),
+  "projectCost": zod.number().optional(),
+  "projectStartDate": zod.string().optional(),
+  "projectCompletionDate": zod.string().optional(),
+  "soldPrice": zod.number().optional()
+})
+
+export const UpdatePropertyResponse = zod.object({
+  "id": zod.number(),
+  "name": zod.string(),
+  "address": zod.string(),
+  "price": zod.string().describe('Display price string (e.g. \"$389,000\" or \"$2,200\/mo\")'),
+  "priceValue": zod.number().nullish().describe('Numeric price for filtering'),
+  "beds": zod.number(),
+  "baths": zod.number(),
+  "sqft": zod.number(),
+  "type": zod.string().describe('House | Condo | Townhouse | Apartment'),
+  "mode": zod.string().describe('buy | rent'),
+  "tag": zod.string().describe('New | Sale | Rent'),
+  "photos": zod.array(zod.string()).describe('Array of base64 data URLs or image URLs'),
+  "status": zod.string().optional().describe('ongoing | completed'),
+  "basement": zod.string().nullish().describe('finished | unfinished | none'),
+  "livableArea": zod.number().nullish().describe('Livable area in sq ft'),
+  "projectCost": zod.number().nullish().describe('Total project cost in dollars'),
+  "projectStartDate": zod.string().nullish().describe('Project start date'),
+  "projectCompletionDate": zod.string().nullish().describe('Completion or expected completion date'),
+  "soldPrice": zod.number().nullish().describe('Sold price or expected list value in dollars'),
+  "createdAt": zod.coerce.date()
+})
+
+
+/**
  * @summary Get a property by ID
  */
 export const GetPropertyParams = zod.object({
