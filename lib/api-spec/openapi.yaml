@@ -64,6 +64,12 @@ paths:
           schema:
             type: string
           description: Search by address or name
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Project status (ongoing | completed)
       responses:
         "200":
           description: List of properties
@@ -229,6 +235,27 @@ components:
           items:
             type: string
           description: Array of base64 data URLs or image URLs
+        status:
+          type: string
+          description: "ongoing | completed"
+        basement:
+          type: ["string", "null"]
+          description: "finished | unfinished | none"
+        livableArea:
+          type: ["integer", "null"]
+          description: Livable area in sq ft
+        projectCost:
+          type: ["integer", "null"]
+          description: Total project cost in dollars
+        projectStartDate:
+          type: ["string", "null"]
+          description: Project start date
+        projectCompletionDate:
+          type: ["string", "null"]
+          description: Completion or expected completion date
+        soldPrice:
+          type: ["integer", "null"]
+          description: Sold price or expected list value in dollars
         createdAt:
           type: string
           format: date-time
@@ -262,6 +289,20 @@ components:
           type: array
           items:
             type: string
+        status:
+          type: string
+        basement:
+          type: string
+        livableArea:
+          type: integer
+        projectCost:
+          type: integer
+        projectStartDate:
+          type: string
+        projectCompletionDate:
+          type: string
+        soldPrice:
+          type: integer
 
     PropertyStats:
       type: object

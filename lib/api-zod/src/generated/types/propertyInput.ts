@@ -15,4 +15,11 @@ export interface PropertyInput {
   type: string;
   mode: string;
   photos?: string[];
+  status?: string;
+  basement?: string;
+  livableArea?: number;
+  projectCost?: number;
+  projectStartDate?: string;
+  projectCompletionDate?: string;
+  soldPrice?: number;
 }

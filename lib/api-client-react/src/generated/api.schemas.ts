@@ -31,6 +31,38 @@ export interface Property {
   tag: string;
   /** Array of base64 data URLs or image URLs */
   photos: string[];
+  /** ongoing | completed */
+  status?: string;
+  /**
+     * finished | unfinished | none
+     * @nullable
+     */
+  basement?: string | null;
+  /**
+     * Livable area in sq ft
+     * @nullable
+     */
+  livableArea?: number | null;
+  /**
+     * Total project cost in dollars
+     * @nullable
+     */
+  projectCost?: number | null;
+  /**
+     * Project start date
+     * @nullable
+     */
+  projectStartDate?: string | null;
+  /**
+     * Completion or expected completion date
+     * @nullable
+     */
+  projectCompletionDate?: string | null;
+  /**
+     * Sold price or expected list value in dollars
+     * @nullable
+     */
+  soldPrice?: number | null;
   createdAt: string;
 }
 
@@ -43,6 +75,13 @@ export interface PropertyInput {
   type: string;
   mode: string;
   photos?: string[];
+  status?: string;
+  basement?: string;
+  livableArea?: number;
+  projectCost?: number;
+  projectStartDate?: string;
+  projectCompletionDate?: string;
+  soldPrice?: number;
 }
 
 export interface PropertyStats {
@@ -79,5 +118,9 @@ maxPrice?: number;
  * Search by address or name
  */
 search?: string;
+/**
+ * Project status (ongoing | completed)
+ */
+status?: string;
 };
 

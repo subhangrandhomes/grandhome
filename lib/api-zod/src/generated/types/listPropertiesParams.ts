@@ -27,4 +27,8 @@ maxPrice?: number;
  * Search by address or name
  */
 search?: string;
+/**
+ * Project status (ongoing | completed)
+ */
+status?: string;
 };

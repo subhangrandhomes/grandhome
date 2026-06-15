@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { db, propertiesTable } from "@workspace/db";
-import { eq, ilike, gte, or, and, desc, count, avg } from "drizzle-orm";
+import { eq, desc } from "drizzle-orm";
 import {
   ListPropertiesQueryParams,
   CreatePropertyBody,
@@ -23,13 +23,7 @@ router.get("/properties/stats", async (req, res) => {
     const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
     const newListings = rows.filter((p) => new Date(p.createdAt) >= oneWeekAgo).length;
 
-    res.json({
-      totalListings: rows.length,
-      forSale,
-      forRent,
-      avgPrice,
-      newListings,
-    });
+    res.json({ totalListings: rows.length, forSale, forRent, avgPrice, newListings });
   } catch (err) {
     req.log.error({ err }, "Failed to get property stats");
     res.status(500).json({ error: "Failed to get property stats" });
@@ -38,11 +32,7 @@ router.get("/properties/stats", async (req, res) => {
 
 router.get("/properties/featured", async (req, res) => {
   try {
-    const rows = await db
-      .select()
-      .from(propertiesTable)
-      .orderBy(desc(propertiesTable.createdAt))
-      .limit(6);
+    const rows = await db.select().from(propertiesTable).orderBy(desc(propertiesTable.createdAt));
     res.json(rows.map(serialize));
   } catch (err) {
     req.log.error({ err }, "Failed to get featured properties");
@@ -58,19 +48,14 @@ router.get("/properties", async (req, res) => {
       return;
     }
 
-    const { beds, type, mode, maxPrice, search } = parsed.data;
+    const { beds, type, mode, maxPrice, search, status } = parsed.data as typeof parsed.data & { status?: string };
 
     let rows = await db.select().from(propertiesTable).orderBy(desc(propertiesTable.createdAt));
 
-    if (beds) {
-      rows = rows.filter((p) => p.beds >= beds);
-    }
-    if (type) {
-      rows = rows.filter((p) => p.type === type);
-    }
-    if (mode) {
-      rows = rows.filter((p) => p.mode === mode);
-    }
+    if (beds) rows = rows.filter((p) => p.beds >= beds);
+    if (type) rows = rows.filter((p) => p.type === type);
+    if (mode) rows = rows.filter((p) => p.mode === mode);
+    if (status) rows = rows.filter((p) => p.status === status);
     if (maxPrice && maxPrice > 0) {
       rows = rows.filter((p) => {
         if (p.mode === "rent") return true;
@@ -80,8 +65,7 @@ router.get("/properties", async (req, res) => {
     if (search) {
       const q = search.toLowerCase();
       rows = rows.filter(
-        (p) =>
-          p.address.toLowerCase().includes(q) || p.name.toLowerCase().includes(q)
+        (p) => p.address.toLowerCase().includes(q) || p.name.toLowerCase().includes(q)
       );
     }
 
@@ -100,29 +84,38 @@ router.post("/properties", async (req, res) => {
       return;
     }
 
-    const { address, price, beds, baths, sqft, type, mode, photos } = parsed.data;
+    const {
+      address, price, beds, baths, sqft, type, mode, photos,
+      status, basement, livableArea, projectCost, projectStartDate,
+      projectCompletionDate, soldPrice,
+    } = parsed.data as typeof parsed.data & {
+      status?: string;
+      basement?: string;
+      livableArea?: number;
+      projectCost?: number;
+      projectStartDate?: string;
+      projectCompletionDate?: string;
+      soldPrice?: number;
+    };
 
     const addrShort = address.split(",")[0];
     const name = `${addrShort} — ${type}`;
     const tag = mode === "rent" ? "Rent" : "New";
-
     const numStr = price.replace(/[^0-9]/g, "");
     const priceValue = numStr ? parseInt(numStr, 10) : null;
 
     const [row] = await db
       .insert(propertiesTable)
       .values({
-        name,
-        address,
-        price,
-        priceValue,
-        beds,
-        baths,
-        sqft,
-        type,
-        mode,
-        tag,
+        name, address, price, priceValue, beds, baths, sqft, type, mode, tag,
         photos: JSON.stringify(photos ?? []),
+        status: status ?? "ongoing",
+        basement: basement ?? null,
+        livableArea: livableArea ?? null,
+        projectCost: projectCost ?? null,
+        projectStartDate: projectStartDate ?? null,
+        projectCompletionDate: projectCompletionDate ?? null,
+        soldPrice: soldPrice ?? null,
       })
       .returning();
 
@@ -187,11 +180,7 @@ function serialize(p: typeof propertiesTable.$inferSelect) {
   return {
     ...p,
     photos: (() => {
-      try {
-        return JSON.parse(p.photos);
-      } catch {
-        return [];
-      }
+      try { return JSON.parse(p.photos); } catch { return []; }
     })(),
     createdAt: p.createdAt.toISOString(),
   };

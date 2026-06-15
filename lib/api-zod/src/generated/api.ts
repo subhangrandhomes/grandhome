@@ -26,7 +26,8 @@ export const ListPropertiesQueryParams = zod.object({
   "type": zod.coerce.string().optional().describe('Property type (House, Condo, Townhouse, Apartment)'),
   "mode": zod.coerce.string().optional().describe('Listing mode (buy, rent)'),
   "maxPrice": zod.coerce.number().optional().describe('Maximum price in thousands (e.g. 500 = $500K)'),
-  "search": zod.coerce.string().optional().describe('Search by address or name')
+  "search": zod.coerce.string().optional().describe('Search by address or name'),
+  "status": zod.coerce.string().optional().describe('Project status (ongoing | completed)')
 })
 
 export const ListPropertiesResponseItem = zod.object({
@@ -42,6 +43,13 @@ export const ListPropertiesResponseItem = zod.object({
   "mode": zod.string().describe('buy | rent'),
   "tag": zod.string().describe('New | Sale | Rent'),
   "photos": zod.array(zod.string()).describe('Array of base64 data URLs or image URLs'),
+  "status": zod.string().optional().describe('ongoing | completed'),
+  "basement": zod.string().nullish().describe('finished | unfinished | none'),
+  "livableArea": zod.number().nullish().describe('Livable area in sq ft'),
+  "projectCost": zod.number().nullish().describe('Total project cost in dollars'),
+  "projectStartDate": zod.string().nullish().describe('Project start date'),
+  "projectCompletionDate": zod.string().nullish().describe('Completion or expected completion date'),
+  "soldPrice": zod.number().nullish().describe('Sold price or expected list value in dollars'),
   "createdAt": zod.coerce.date()
 })
 export const ListPropertiesResponse = zod.array(ListPropertiesResponseItem)
@@ -58,7 +66,14 @@ export const CreatePropertyBody = zod.object({
   "sqft": zod.number(),
   "type": zod.string(),
   "mode": zod.string(),
-  "photos": zod.array(zod.string()).optional()
+  "photos": zod.array(zod.string()).optional(),
+  "status": zod.string().optional(),
+  "basement": zod.string().optional(),
+  "livableArea": zod.number().optional(),
+  "projectCost": zod.number().optional(),
+  "projectStartDate": zod.string().optional(),
+  "projectCompletionDate": zod.string().optional(),
+  "soldPrice": zod.number().optional()
 })
 
 
@@ -92,6 +107,13 @@ export const GetFeaturedPropertiesResponseItem = zod.object({
   "mode": zod.string().describe('buy | rent'),
   "tag": zod.string().describe('New | Sale | Rent'),
   "photos": zod.array(zod.string()).describe('Array of base64 data URLs or image URLs'),
+  "status": zod.string().optional().describe('ongoing | completed'),
+  "basement": zod.string().nullish().describe('finished | unfinished | none'),
+  "livableArea": zod.number().nullish().describe('Livable area in sq ft'),
+  "projectCost": zod.number().nullish().describe('Total project cost in dollars'),
+  "projectStartDate": zod.string().nullish().describe('Project start date'),
+  "projectCompletionDate": zod.string().nullish().describe('Completion or expected completion date'),
+  "soldPrice": zod.number().nullish().describe('Sold price or expected list value in dollars'),
   "createdAt": zod.coerce.date()
 })
 export const GetFeaturedPropertiesResponse = zod.array(GetFeaturedPropertiesResponseItem)
@@ -117,6 +139,13 @@ export const GetPropertyResponse = zod.object({
   "mode": zod.string().describe('buy | rent'),
   "tag": zod.string().describe('New | Sale | Rent'),
   "photos": zod.array(zod.string()).describe('Array of base64 data URLs or image URLs'),
+  "status": zod.string().optional().describe('ongoing | completed'),
+  "basement": zod.string().nullish().describe('finished | unfinished | none'),
+  "livableArea": zod.number().nullish().describe('Livable area in sq ft'),
+  "projectCost": zod.number().nullish().describe('Total project cost in dollars'),
+  "projectStartDate": zod.string().nullish().describe('Project start date'),
+  "projectCompletionDate": zod.string().nullish().describe('Completion or expected completion date'),
+  "soldPrice": zod.number().nullish().describe('Sold price or expected list value in dollars'),
   "createdAt": zod.coerce.date()
 })
 

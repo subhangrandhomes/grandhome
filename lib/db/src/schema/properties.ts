@@ -15,6 +15,13 @@ export const propertiesTable = pgTable("properties", {
   mode: text("mode").notNull(),
   tag: text("tag").notNull().default("New"),
   photos: text("photos").notNull().default("[]"),
+  status: text("status").notNull().default("ongoing"),
+  basement: text("basement"),
+  livableArea: integer("livable_area"),
+  projectCost: integer("project_cost"),
+  projectStartDate: text("project_start_date"),
+  projectCompletionDate: text("project_completion_date"),
+  soldPrice: integer("sold_price"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 

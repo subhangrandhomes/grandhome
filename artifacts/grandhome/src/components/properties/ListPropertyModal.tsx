@@ -9,7 +9,8 @@ interface ListPropertyModalProps {
 
 export function ListPropertyModal({ open, onClose }: ListPropertyModalProps) {
   const queryClient = useQueryClient();
-  const [tab, setTab] = useState<"details" | "photos">("details");
+  const [tab, setTab] = useState<"details" | "project" | "photos">("details");
+
   const [addr, setAddr] = useState("");
   const [mode, setMode] = useState("buy");
   const [propType, setPropType] = useState("House");
@@ -17,6 +18,13 @@ export function ListPropertyModal({ open, onClose }: ListPropertyModalProps) {
   const [beds, setBeds] = useState("");
   const [baths, setBaths] = useState("");
   const [sqft, setSqft] = useState("");
+  const [basement, setBasement] = useState("none");
+  const [livableArea, setLivableArea] = useState("");
+  const [status, setStatus] = useState("ongoing");
+  const [projectCost, setProjectCost] = useState("");
+  const [projectStartDate, setProjectStartDate] = useState("");
+  const [projectCompletionDate, setProjectCompletionDate] = useState("");
+  const [soldPrice, setSoldPrice] = useState("");
   const [error, setError] = useState("");
   const [photos, setPhotos] = useState<string[]>([]);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -28,15 +36,15 @@ export function ListPropertyModal({ open, onClose }: ListPropertyModalProps) {
         queryClient.invalidateQueries({ queryKey: getListPropertiesQueryKey() });
         handleClose();
       },
-      onError: () => {
-        setError("Failed to create listing. Please try again.");
-      },
+      onError: () => setError("Failed to create listing. Please try again."),
     },
   });
 
   const handleClose = () => {
     setAddr(""); setMode("buy"); setPropType("House");
     setPrice(""); setBeds(""); setBaths(""); setSqft("");
+    setBasement("none"); setLivableArea(""); setStatus("ongoing");
+    setProjectCost(""); setProjectStartDate(""); setProjectCompletionDate(""); setSoldPrice("");
     setError(""); setPhotos([]); setTab("details");
     onClose();
   };
@@ -46,9 +54,7 @@ export function ListPropertyModal({ open, onClose }: ListPropertyModalProps) {
     files.forEach((file) => {
       const reader = new FileReader();
       reader.onload = (ev) => {
-        if (ev.target?.result) {
-          setPhotos((prev) => [...prev, ev.target!.result as string]);
-        }
+        if (ev.target?.result) setPhotos((prev) => [...prev, ev.target!.result as string]);
       };
       reader.readAsDataURL(file);
     });
@@ -57,7 +63,7 @@ export function ListPropertyModal({ open, onClose }: ListPropertyModalProps) {
 
   const handleSubmit = () => {
     if (!addr || !price || !beds || !baths || !sqft) {
-      setError("Please fill in all required fields.");
+      setError("Please fill in all required fields on the Details tab.");
       setTab("details");
       return;
     }
@@ -72,14 +78,21 @@ export function ListPropertyModal({ open, onClose }: ListPropertyModalProps) {
         type: propType,
         mode,
         photos,
-      },
+        status,
+        basement: basement !== "none" ? basement : undefined,
+        livableArea: livableArea ? parseInt(livableArea) : undefined,
+        projectCost: projectCost ? parseInt(projectCost) : undefined,
+        projectStartDate: projectStartDate || undefined,
+        projectCompletionDate: projectCompletionDate || undefined,
+        soldPrice: soldPrice ? parseInt(soldPrice) : undefined,
+      } as never,
     });
   };
 
   if (!open) return null;
 
   const inputClass =
-    "h-10 border border-blue-200 px-[14px] text-[13px] font-sans text-[#0f2d56] outline-none focus:border-[#1a4a8a] transition-colors";
+    "h-10 border border-blue-200 px-[14px] text-[13px] font-sans text-[#0f2d56] outline-none focus:border-[#1a4a8a] transition-colors bg-white";
   const labelClass =
     "text-[10px] font-sans font-semibold tracking-[.14em] uppercase text-[#3a6199]";
 
@@ -88,10 +101,12 @@ export function ListPropertyModal({ open, onClose }: ListPropertyModalProps) {
       className="fixed inset-0 z-[200] bg-black/50 flex items-center justify-center"
       onClick={(e) => { if (e.target === e.currentTarget) handleClose(); }}
     >
-      <div className="bg-white w-full max-w-[540px] mx-4 shadow-2xl" role="dialog" aria-modal="true">
+      <div className="bg-white w-full max-w-[560px] mx-4 shadow-2xl" role="dialog" aria-modal="true">
         {/* Header */}
-        <div className="flex items-center justify-between px-7 py-5 border-b border-blue-100"
-          style={{ background: "linear-gradient(90deg, #0f2d56 0%, #1a4a8a 100%)" }}>
+        <div
+          className="flex items-center justify-between px-7 py-5 border-b border-blue-100"
+          style={{ background: "linear-gradient(90deg, #0f2d56 0%, #1a4a8a 100%)" }}
+        >
           <h2 className="font-serif text-[22px] font-semibold text-white">List a property</h2>
           <button onClick={handleClose} className="text-[22px] text-blue-300 leading-none px-1 hover:text-white transition-colors">
             &times;
@@ -100,23 +115,24 @@ export function ListPropertyModal({ open, onClose }: ListPropertyModalProps) {
 
         {/* Tabs */}
         <div className="flex border-b border-blue-100 px-7 bg-[#f8faff]">
-          {(["details", "photos"] as const).map((t) => (
+          {(["details", "project", "photos"] as const).map((t) => (
             <button
               key={t}
               onClick={() => setTab(t)}
-              className={`h-11 px-5 border-none bg-transparent text-[11px] font-sans font-semibold tracking-[.12em] uppercase border-b-2 mb-[-1px] transition-colors ${
+              className={`h-11 px-4 border-none bg-transparent text-[11px] font-sans font-semibold tracking-[.12em] uppercase border-b-2 mb-[-1px] transition-colors ${
                 tab === t
                   ? "text-[#1a4a8a] border-[#1a4a8a]"
                   : "text-[#6b88aa] border-transparent hover:text-[#1a4a8a]"
               }`}
             >
-              {t.charAt(0).toUpperCase() + t.slice(1)}
+              {t === "details" ? "Details" : t === "project" ? "Project Info" : "Photos"}
             </button>
           ))}
         </div>
 
         {/* Body */}
-        <div className="px-7 py-6 flex flex-col gap-4 max-h-[62vh] overflow-y-auto">
+        <div className="px-7 py-6 flex flex-col gap-4 max-h-[60vh] overflow-y-auto">
+
           {tab === "details" && (
             <>
               <div className="flex flex-col gap-[6px]">
@@ -132,14 +148,14 @@ export function ListPropertyModal({ open, onClose }: ListPropertyModalProps) {
               <div className="grid grid-cols-2 gap-[14px]">
                 <div className="flex flex-col gap-[6px]">
                   <label className={labelClass}>Listing type *</label>
-                  <select value={mode} onChange={(e) => setMode(e.target.value)} className={inputClass + " bg-white w-full"}>
+                  <select value={mode} onChange={(e) => setMode(e.target.value)} className={inputClass + " w-full"}>
                     <option value="buy">For sale</option>
                     <option value="rent">For rent</option>
                   </select>
                 </div>
                 <div className="flex flex-col gap-[6px]">
                   <label className={labelClass}>Property type *</label>
-                  <select value={propType} onChange={(e) => setPropType(e.target.value)} className={inputClass + " bg-white w-full"}>
+                  <select value={propType} onChange={(e) => setPropType(e.target.value)} className={inputClass + " w-full"}>
                     <option value="House">House</option>
                     <option value="Condo">Condo</option>
                     <option value="Townhouse">Townhouse</option>
@@ -179,11 +195,104 @@ export function ListPropertyModal({ open, onClose }: ListPropertyModalProps) {
                 ))}
               </div>
 
+              <div className="grid grid-cols-2 gap-[14px]">
+                <div className="flex flex-col gap-[6px]">
+                  <label className={labelClass}>Basement</label>
+                  <select value={basement} onChange={(e) => setBasement(e.target.value)} className={inputClass + " w-full"}>
+                    <option value="none">None</option>
+                    <option value="finished">Finished</option>
+                    <option value="unfinished">Unfinished</option>
+                  </select>
+                </div>
+                <div className="flex flex-col gap-[6px]">
+                  <label className={labelClass}>Livable area (sq ft)</label>
+                  <input
+                    type="number"
+                    value={livableArea}
+                    onChange={(e) => setLivableArea(e.target.value)}
+                    placeholder="e.g. 1800"
+                    min="0"
+                    className={inputClass + " w-full"}
+                  />
+                </div>
+              </div>
+
               {error && (
                 <div className="text-[12px] font-sans text-red-600 bg-red-50 px-3 py-2 border border-red-200">
                   {error}
                 </div>
               )}
+            </>
+          )}
+
+          {tab === "project" && (
+            <>
+              <div className="flex flex-col gap-[6px]">
+                <label className={labelClass}>Project status</label>
+                <select value={status} onChange={(e) => setStatus(e.target.value)} className={inputClass + " w-full"}>
+                  <option value="ongoing">Ongoing</option>
+                  <option value="completed">Completed</option>
+                </select>
+              </div>
+
+              <div className="grid grid-cols-2 gap-[14px]">
+                <div className="flex flex-col gap-[6px]">
+                  <label className={labelClass}>Project cost ($)</label>
+                  <input
+                    type="number"
+                    value={projectCost}
+                    onChange={(e) => setProjectCost(e.target.value)}
+                    placeholder="e.g. 320000"
+                    min="0"
+                    className={inputClass + " w-full"}
+                  />
+                </div>
+                <div className="flex flex-col gap-[6px]">
+                  <label className={labelClass}>{status === "completed" ? "Sold price ($)" : "Expected list value ($)"}</label>
+                  <input
+                    type="number"
+                    value={soldPrice}
+                    onChange={(e) => setSoldPrice(e.target.value)}
+                    placeholder="e.g. 450000"
+                    min="0"
+                    className={inputClass + " w-full"}
+                  />
+                </div>
+              </div>
+
+              {projectCost && soldPrice && (
+                <div className="bg-[#f0f5ff] border border-blue-100 px-4 py-3 flex items-center justify-between">
+                  <span className="text-[11px] font-sans font-semibold tracking-[.1em] uppercase text-[#6b88aa]">Estimated ROI</span>
+                  <span className={`font-serif text-[22px] font-bold ${
+                    parseInt(soldPrice) >= parseInt(projectCost) ? "text-green-600" : "text-red-500"
+                  }`}>
+                    {parseInt(projectCost) > 0
+                      ? `${parseInt(soldPrice) >= parseInt(projectCost) ? "+" : ""}${(((parseInt(soldPrice) - parseInt(projectCost)) / parseInt(projectCost)) * 100).toFixed(1)}%`
+                      : "—"}
+                  </span>
+                </div>
+              )}
+
+              <div className="grid grid-cols-2 gap-[14px]">
+                <div className="flex flex-col gap-[6px]">
+                  <label className={labelClass}>Project start date</label>
+                  <input
+                    type="date"
+                    value={projectStartDate}
+                    onChange={(e) => setProjectStartDate(e.target.value)}
+                    className={inputClass + " w-full"}
+                  />
+                </div>
+                <div className="flex flex-col gap-[6px]">
+                  <label className={labelClass}>{status === "completed" ? "Completion date" : "Expected completion"}</label>
+                  <input
+                    type="date"
+                    value={projectCompletionDate}
+                    onChange={(e) => setProjectCompletionDate(e.target.value)}
+                    className={inputClass + " w-full"}
+                  />
+                </div>
+              </div>
             </>
           )}
 
