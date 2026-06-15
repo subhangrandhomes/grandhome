@@ -8,18 +8,12 @@ export function Navbar() {
     <>
       {/* Logo bar — white */}
       <div className="bg-white px-10 py-[18px] flex items-center justify-between border-b border-blue-100">
-        <div className="flex items-center gap-5">
-          <div className="w-16 h-16 border-2 border-[#1a4a8a] rounded-full flex items-center justify-center flex-shrink-0">
-            <span className="font-serif text-[22px] font-semibold tracking-tight text-[#1a4a8a]">GI</span>
-          </div>
-          <div className="flex flex-col leading-none">
-            <span className="font-serif text-[26px] font-semibold tracking-[.06em] uppercase text-[#0f2d56]">Grandhome</span>
-            <span className="text-[9px] font-medium tracking-[.22em] uppercase text-blue-400 mt-1">
-              Investments &bull; Real Estate Group
-            </span>
-          </div>
-          <div className="w-px h-12 bg-blue-100 mx-2" />
-          <span className="font-serif text-[28px] font-normal tracking-[.18em] uppercase text-[#3a7bd5]">Luxury</span>
+        <div className="flex items-center">
+          <img
+            src="/logo.png"
+            alt="Grand Homes — Residential Construction & Investments"
+            className="h-[90px] w-auto object-contain"
+          />
         </div>
         <div className="flex gap-3">
           <button
