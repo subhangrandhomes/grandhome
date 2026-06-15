@@ -11,11 +11,11 @@ export function CTAStrip() {
         style={{ background: "linear-gradient(90deg, #1a4a8a 0%, #3a7bd5 100%)" }}
       >
         <div>
-          <div className="text-[12px] font-sans font-medium tracking-[.08em] text-blue-100">
+          <div className="font-serif text-[28px] font-semibold tracking-[.02em]">
             Want to list or buy a property?
           </div>
-          <div className="font-serif text-[28px] font-semibold tracking-[.02em]">
-            +1 800 555 0199
+          <div className="text-[12px] font-sans font-medium tracking-[.08em] text-blue-100 mt-1">
+            Get in touch with our team today
           </div>
         </div>
         <button

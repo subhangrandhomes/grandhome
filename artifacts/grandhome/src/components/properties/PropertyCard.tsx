@@ -1,6 +1,3 @@
-import { useQueryClient } from "@tanstack/react-query";
-import { useDeleteProperty, getGetFeaturedPropertiesQueryKey, getListPropertiesQueryKey } from "@workspace/api-client-react";
-
 type Property = {
   id: number;
   name: string;
@@ -13,13 +10,14 @@ type Property = {
   mode: string;
   tag: string;
   photos: string[];
+  createdAt?: string;
 };
 
 const TYPE_BG: Record<string, string> = {
-  House: "#c2d4e8",
-  Condo: "#b8c8e0",
-  Townhouse: "#c8d8ec",
-  Apartment: "#bdd0e8",
+  House: "linear-gradient(135deg, #c2d4e8 0%, #8faac8 100%)",
+  Condo: "linear-gradient(135deg, #b8c8e0 0%, #7a9abf 100%)",
+  Townhouse: "linear-gradient(135deg, #c8d8ec 0%, #90aacf 100%)",
+  Apartment: "linear-gradient(135deg, #bdd0e8 0%, #85a5c5 100%)",
 };
 
 function tagLabel(tag: string) {
@@ -30,27 +28,18 @@ function tagLabel(tag: string) {
 
 interface PropertyCardProps {
   property: Property;
+  onClick: (property: Property) => void;
 }
 
-export function PropertyCard({ property: p }: PropertyCardProps) {
-  const queryClient = useQueryClient();
-  const deleteProperty = useDeleteProperty({
-    mutation: {
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: getGetFeaturedPropertiesQueryKey() });
-        queryClient.invalidateQueries({ queryKey: getListPropertiesQueryKey() });
-      },
-    },
-  });
+export type { Property as PropertyType };
 
-  const handleDelete = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (!confirm(`Remove "${p.name}" from listings?`)) return;
-    deleteProperty.mutate({ id: p.id });
-  };
-
+export function PropertyCard({ property: p, onClick }: PropertyCardProps) {
   return (
-    <div className="relative overflow-hidden cursor-pointer group" style={{ aspectRatio: "4/3" }}>
+    <div
+      className="relative overflow-hidden cursor-pointer group"
+      style={{ aspectRatio: "4/3" }}
+      onClick={() => onClick(p)}
+    >
       {p.photos && p.photos.length > 0 ? (
         <img
           src={p.photos[0]}
@@ -59,8 +48,8 @@ export function PropertyCard({ property: p }: PropertyCardProps) {
         />
       ) : (
         <div
-          className="w-full h-full flex items-end transition-transform duration-500 group-hover:scale-105"
-          style={{ background: `linear-gradient(135deg, ${TYPE_BG[p.type] ?? "#c2d4e8"} 0%, #8faac8 100%)` }}
+          className="w-full h-full transition-transform duration-500 group-hover:scale-105"
+          style={{ background: TYPE_BG[p.type] ?? TYPE_BG.House }}
         />
       )}
 
@@ -73,13 +62,12 @@ export function PropertyCard({ property: p }: PropertyCardProps) {
         {tagLabel(p.tag)}
       </span>
 
-      <button
-        onClick={handleDelete}
-        className="absolute top-3 right-3 bg-red-600/85 text-white text-[9px] font-sans font-semibold tracking-[.08em] uppercase px-[10px] py-[5px] opacity-0 group-hover:opacity-100 transition-opacity"
-        disabled={deleteProperty.isPending}
-      >
-        Remove
-      </button>
+      {/* "View details" hint on hover */}
+      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+        <span className="bg-white/90 text-[#0f2d56] text-[10px] font-sans font-semibold tracking-[.16em] uppercase px-5 py-2 shadow-lg">
+          View details
+        </span>
+      </div>
 
       {p.photos && p.photos.length > 1 && (
         <span className="absolute bottom-[52px] right-3 bg-[#1a4a8a]/80 text-white text-[9px] font-sans font-semibold px-2 py-[3px] tracking-[.06em]">

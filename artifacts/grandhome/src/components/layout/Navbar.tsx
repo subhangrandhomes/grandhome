@@ -6,21 +6,6 @@ export function Navbar() {
 
   return (
     <>
-      {/* Top bar — deep navy */}
-      <div className="bg-[#0f2d56] text-blue-200 text-[11px] tracking-[.04em] px-10 py-[7px] flex items-center justify-between">
-        <div className="flex gap-6">
-          <span>CALL US TODAY: +1 800 555 0199</span>
-          <a href="mailto:info@grandhomeinvestments.com" className="hover:text-white transition-colors">
-            info@grandhomeinvestments.com
-          </a>
-        </div>
-        <div className="flex gap-4 text-sm">
-          <a href="#" className="hover:text-white transition-colors">FB</a>
-          <a href="#" className="hover:text-white transition-colors">IG</a>
-          <a href="#" className="hover:text-white transition-colors">LI</a>
-        </div>
-      </div>
-
       {/* Logo bar — white */}
       <div className="bg-white px-10 py-[18px] flex items-center justify-between border-b border-blue-100">
         <div className="flex items-center gap-5">

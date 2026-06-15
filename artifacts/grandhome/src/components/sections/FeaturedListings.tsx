@@ -1,8 +1,11 @@
+import { useState } from "react";
 import { useGetFeaturedProperties } from "@workspace/api-client-react";
-import { PropertyCard } from "@/components/properties/PropertyCard";
+import { PropertyCard, type PropertyType } from "@/components/properties/PropertyCard";
+import { PropertyDetailModal } from "@/components/properties/PropertyDetailModal";
 
 export function FeaturedListings() {
   const { data: properties, isLoading } = useGetFeaturedProperties();
+  const [selected, setSelected] = useState<PropertyType | null>(null);
 
   return (
     <section id="listings">
@@ -25,7 +28,11 @@ export function FeaturedListings() {
       ) : properties && properties.length > 0 ? (
         <div className="grid grid-cols-3 gap-[3px] pb-3">
           {properties.map((p) => (
-            <PropertyCard key={p.id} property={{ ...p, photos: p.photos as string[] }} />
+            <PropertyCard
+              key={p.id}
+              property={{ ...p, photos: p.photos as string[] }}
+              onClick={setSelected}
+            />
           ))}
         </div>
       ) : (
@@ -42,6 +49,8 @@ export function FeaturedListings() {
           View all
         </a>
       </div>
+
+      <PropertyDetailModal property={selected} onClose={() => setSelected(null)} />
     </section>
   );
 }
