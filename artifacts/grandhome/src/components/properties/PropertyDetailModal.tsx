@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import {
   useDeleteProperty,
@@ -59,10 +59,18 @@ function toDateInput(d: string | null | undefined) {
   return d;
 }
 
-export function PropertyDetailModal({ property: p, onClose }: Props) {
+export function PropertyDetailModal({ property: initialProp, onClose }: Props) {
+  const [p, setP] = useState<Property | null>(initialProp);
   const [photoIndex, setPhotoIndex] = useState(0);
   const [editing, setEditing] = useState(false);
   const queryClient = useQueryClient();
+
+  // Sync when user opens a different property
+  useEffect(() => {
+    setP(initialProp);
+    setEditing(false);
+    setPhotoIndex(0);
+  }, [initialProp?.id]);
 
   // Edit form state
   const [eAddr, setEAddr] = useState("");
@@ -92,7 +100,11 @@ export function PropertyDetailModal({ property: p, onClose }: Props) {
 
   const updateProperty = useUpdateProperty({
     mutation: {
-      onSuccess: () => { invalidate(); setEditing(false); },
+      onSuccess: (data) => {
+        setP({ ...data, photos: data.photos as string[] });
+        invalidate();
+        setEditing(false);
+      },
       onError: () => setESaveError("Failed to save changes. Please try again."),
     },
   });
