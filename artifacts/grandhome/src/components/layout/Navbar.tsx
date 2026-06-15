@@ -12,7 +12,7 @@ export function Navbar() {
           <img
             src="/logo.png"
             alt="Grand Homes — Residential Construction & Investments"
-            className="h-[90px] w-auto object-contain"
+            className="h-[130px] w-auto object-contain"
           />
         </div>
         <div className="flex gap-3">
