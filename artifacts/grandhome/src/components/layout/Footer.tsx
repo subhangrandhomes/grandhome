@@ -1,6 +1,6 @@
 export function Footer() {
   return (
-    <footer style={{ background: "linear-gradient(180deg, #0f2d56 0%, #071a35 100%)" }} className="text-blue-200 px-20 pt-12 pb-8">
+    <footer id="contact-info" style={{ background: "linear-gradient(180deg, #0f2d56 0%, #071a35 100%)" }} className="text-blue-200 px-20 pt-12 pb-8">
       <div className="grid grid-cols-3 gap-12 mb-9">
         <div>
           <div className="mb-4">
