@@ -23,7 +23,7 @@ export function Navbar() {
             + List property
           </button>
           <a
-            href="#contact"
+            href="#contact-info"
             className="h-9 px-[22px] border border-[#1a4a8a] bg-[#1a4a8a] text-white text-[11px] font-semibold tracking-[.12em] uppercase transition-colors hover:bg-[#0f2d56] flex items-center"
           >
             Contact us
@@ -39,7 +39,7 @@ export function Navbar() {
             { label: "Our listings", href: "#listings" },
             { label: "Buy", href: "#listings" },
             { label: "About us", href: "#about" },
-            { label: "Contact", href: "#contact" },
+            { label: "Contact", href: "#contact-info" },
           ].map((item) => (
             <li key={item.label}>
               <a
