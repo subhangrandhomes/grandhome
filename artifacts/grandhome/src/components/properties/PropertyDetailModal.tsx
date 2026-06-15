@@ -48,10 +48,6 @@ function fmtDate(d: string) {
   if (isNaN(date.getTime())) return d;
   return date.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
 }
-function computeROI(cost: number, sold: number) {
-  if (cost === 0) return null;
-  return (((sold - cost) / cost) * 100).toFixed(1);
-}
 function toDateInput(d: string | null | undefined) {
   if (!d) return "";
   const date = new Date(d);
@@ -83,10 +79,8 @@ export function PropertyDetailModal({ property: initialProp, onClose }: Props) {
   const [eStatus, setEStatus] = useState("");
   const [eBasement, setEBasement] = useState("");
   const [eLivableArea, setELivableArea] = useState("");
-  const [eProjectCost, setEProjectCost] = useState("");
   const [eStartDate, setEStartDate] = useState("");
   const [eCompletionDate, setECompletionDate] = useState("");
-  const [eSoldPrice, setESoldPrice] = useState("");
   const [eSaveError, setESaveError] = useState("");
 
   const invalidate = () => {
@@ -114,7 +108,6 @@ export function PropertyDetailModal({ property: initialProp, onClose }: Props) {
   const hasPhotos = p.photos && p.photos.length > 0;
   const currentPhoto = hasPhotos ? p.photos[photoIndex] : null;
   const isCompleted = p.status === "completed";
-  const roi = p.projectCost && p.soldPrice ? computeROI(p.projectCost, p.soldPrice) : null;
 
   const openEdit = () => {
     setEAddr(p.address);
@@ -127,10 +120,8 @@ export function PropertyDetailModal({ property: initialProp, onClose }: Props) {
     setEStatus(p.status ?? "ongoing");
     setEBasement(p.basement ?? "none");
     setELivableArea(p.livableArea ? String(p.livableArea) : "");
-    setEProjectCost(p.projectCost ? String(p.projectCost) : "");
     setEStartDate(toDateInput(p.projectStartDate));
     setECompletionDate(toDateInput(p.projectCompletionDate));
-    setESoldPrice(p.soldPrice ? String(p.soldPrice) : "");
     setESaveError("");
     setEditing(true);
   };
@@ -154,10 +145,8 @@ export function PropertyDetailModal({ property: initialProp, onClose }: Props) {
         status: eStatus,
         basement: eBasement !== "none" ? eBasement : undefined,
         livableArea: eLivableArea ? parseInt(eLivableArea) : undefined,
-        projectCost: eProjectCost ? parseInt(eProjectCost) : undefined,
         projectStartDate: eStartDate || undefined,
         projectCompletionDate: eCompletionDate || undefined,
-        soldPrice: eSoldPrice ? parseInt(eSoldPrice) : undefined,
       } as never,
     });
   };
@@ -166,11 +155,6 @@ export function PropertyDetailModal({ property: initialProp, onClose }: Props) {
     if (!confirm(`Remove "${p.name}" from listings?`)) return;
     deleteProperty.mutate({ id: p.id });
   };
-
-  // ── Edit ROI preview
-  const editRoi = eProjectCost && eSoldPrice
-    ? computeROI(parseInt(eProjectCost), parseInt(eSoldPrice))
-    : null;
 
   const inputCls = "h-9 border border-blue-200 px-3 text-[12px] font-sans text-[#0f2d56] outline-none focus:border-[#1a4a8a] transition-colors bg-white w-full";
   const labelCls = "text-[9px] font-sans font-semibold tracking-[.14em] uppercase text-[#6b88aa] mb-[3px] block";
@@ -291,18 +275,6 @@ export function PropertyDetailModal({ property: initialProp, onClose }: Props) {
                   ))}
                 </div>
 
-                {/* ROI banner */}
-                {roi !== null && (
-                  <div className={`mb-4 px-4 py-3 border flex items-center justify-between ${
-                    Number(roi) >= 0 ? "bg-green-50 border-green-200" : "bg-red-50 border-red-200"
-                  }`}>
-                    <span className="text-[10px] font-sans font-semibold tracking-[.12em] uppercase text-[#6b88aa]">Return on Investment</span>
-                    <span className={`font-serif text-[22px] font-bold ${Number(roi) >= 0 ? "text-green-600" : "text-red-500"}`}>
-                      {Number(roi) >= 0 ? "+" : ""}{roi}%
-                    </span>
-                  </div>
-                )}
-
                 {/* Detail rows — always show all fields, blank ones show "—" */}
                 <div className="space-y-[9px] mb-5 pb-5 border-b border-blue-100">
                   {[
@@ -311,10 +283,8 @@ export function PropertyDetailModal({ property: initialProp, onClose }: Props) {
                     { label: "Project status", value: isCompleted ? "Completed" : "Ongoing" },
                     { label: "Basement", value: p.basement ? p.basement.charAt(0).toUpperCase() + p.basement.slice(1) : "—" },
                     { label: "Livable area", value: p.livableArea ? `${fmt(p.livableArea)} sq ft` : "—" },
-                    { label: "Project cost", value: p.projectCost ? fmtDollars(p.projectCost) : "—" },
                     { label: "Start date", value: p.projectStartDate ? fmtDate(p.projectStartDate) : "—" },
                     { label: isCompleted ? "Completion date" : "Expected completion", value: p.projectCompletionDate ? fmtDate(p.projectCompletionDate) : "—" },
-                    { label: isCompleted ? "Sold price" : "Expected list value", value: p.soldPrice ? fmtDollars(p.soldPrice) : "—" },
                   ].map((row) => (
                     <div key={row.label} className="flex justify-between items-center">
                       <span className="text-[10px] font-sans font-semibold tracking-[.1em] uppercase text-[#6b88aa]">{row.label}</span>
@@ -424,29 +394,6 @@ export function PropertyDetailModal({ property: initialProp, onClose }: Props) {
                     <input type="number" value={eLivableArea} onChange={(e) => setELivableArea(e.target.value)} min="0" className={inputCls} placeholder="e.g. 1800" />
                   </div>
                 </div>
-
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="flex flex-col">
-                    <label className={labelCls}>Project cost ($)</label>
-                    <input type="number" value={eProjectCost} onChange={(e) => setEProjectCost(e.target.value)} min="0" className={inputCls} placeholder="e.g. 320000" />
-                  </div>
-                  <div className="flex flex-col">
-                    <label className={labelCls}>{eStatus === "completed" ? "Sold price ($)" : "Expected list value ($)"}</label>
-                    <input type="number" value={eSoldPrice} onChange={(e) => setESoldPrice(e.target.value)} min="0" className={inputCls} placeholder="e.g. 450000" />
-                  </div>
-                </div>
-
-                {/* Live ROI preview */}
-                {editRoi !== null && (
-                  <div className={`px-3 py-2 border flex items-center justify-between ${
-                    Number(editRoi) >= 0 ? "bg-green-50 border-green-200" : "bg-red-50 border-red-200"
-                  }`}>
-                    <span className="text-[10px] font-sans font-semibold tracking-[.1em] uppercase text-[#6b88aa]">ROI preview</span>
-                    <span className={`font-serif text-[18px] font-bold ${Number(editRoi) >= 0 ? "text-green-600" : "text-red-500"}`}>
-                      {Number(editRoi) >= 0 ? "+" : ""}{editRoi}%
-                    </span>
-                  </div>
-                )}
 
                 <div className="grid grid-cols-2 gap-3">
                   <div className="flex flex-col">
