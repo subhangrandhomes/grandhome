@@ -3,7 +3,6 @@ import { Footer } from "@/components/layout/Footer";
 import { Hero } from "@/components/sections/Hero";
 import { FeaturedListings } from "@/components/sections/FeaturedListings";
 import { WhoWeAre } from "@/components/sections/WhoWeAre";
-import { StatsBand } from "@/components/sections/StatsBand";
 import { PropertySearch } from "@/components/sections/PropertySearch";
 import { CTAStrip } from "@/components/sections/CTAStrip";
 
@@ -15,7 +14,6 @@ export default function Home() {
         <Hero />
         <FeaturedListings />
         <WhoWeAre />
-        <StatsBand />
         <PropertySearch />
         <CTAStrip />
       </main>
