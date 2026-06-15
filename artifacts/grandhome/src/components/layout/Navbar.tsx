@@ -39,7 +39,6 @@ export function Navbar() {
             { label: "Our listings", href: "#listings" },
             { label: "Buy", href: "#listings" },
             { label: "About us", href: "#about" },
-            { label: "Reviews", href: "#" },
             { label: "Contact", href: "#contact" },
           ].map((item) => (
             <li key={item.label}>
