@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { useAdmin } from "@/context/AdminContext";
 import { useInvestor } from "@/context/InvestorContext";
+import { Navbar } from "@/components/layout/Navbar";
+import { Footer } from "@/components/layout/Footer";
 
 type Property = {
   id: number; name: string; address: string; price: string;
@@ -326,15 +328,17 @@ export default function Investments() {
   const { isAdmin } = useAdmin();
 
   return (
-    <div className="min-h-[60vh] bg-[#f8faff]">
+    <div className="min-h-screen flex flex-col bg-[#f8faff]">
+      <Navbar />
       <div style={{ background: "linear-gradient(90deg, #0f2d56 0%, #1a4a8a 100%)" }} className="px-10 py-10">
         <p className="text-[10px] font-sans font-semibold tracking-[.3em] uppercase text-blue-300 mb-2">Grand Homes</p>
         <h1 className="font-serif text-[38px] font-semibold text-white leading-tight">Investments</h1>
         <p className="text-[13px] font-sans text-blue-200 mt-2">Private portal for Grand Homes investors.</p>
       </div>
-      <div>
+      <div className="flex-1">
         {isAdmin ? <AdminPanel /> : <InvestorPortal />}
       </div>
+      <Footer />
     </div>
   );
 }

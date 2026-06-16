@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "wouter";
 import { ListPropertyModal } from "@/components/properties/ListPropertyModal";
 import { useAdmin } from "@/context/AdminContext";
 
@@ -112,23 +113,16 @@ export function Navbar() {
       {/* Sticky nav */}
       <nav className="bg-white border-b border-blue-100 sticky top-0 z-50">
         <ul className="flex justify-center gap-10 list-none px-10 h-11 items-center">
-          {[
-            { label: "Home", href: "#" },
-            { label: "Our listings", href: "#listings" },
-            { label: "Buy", href: "#listings" },
-            { label: "About us", href: "#about" },
-            { label: "Investments", href: "/investments" },
-            { label: "Contact", href: "#contact-info" },
-          ].map((item) => (
-            <li key={item.label}>
-              <a
-                href={item.href}
-                className="text-[11px] font-semibold tracking-[.14em] uppercase text-[#3a6199] hover:text-[#0f2d56] hover:border-b hover:border-[#1a4a8a] pb-[2px] transition-colors"
-              >
-                {item.label}
-              </a>
-            </li>
-          ))}
+          <li><a href="#" className="text-[11px] font-semibold tracking-[.14em] uppercase text-[#3a6199] hover:text-[#0f2d56] hover:border-b hover:border-[#1a4a8a] pb-[2px] transition-colors">Home</a></li>
+          <li><a href="#listings" className="text-[11px] font-semibold tracking-[.14em] uppercase text-[#3a6199] hover:text-[#0f2d56] hover:border-b hover:border-[#1a4a8a] pb-[2px] transition-colors">Our listings</a></li>
+          <li><a href="#listings" className="text-[11px] font-semibold tracking-[.14em] uppercase text-[#3a6199] hover:text-[#0f2d56] hover:border-b hover:border-[#1a4a8a] pb-[2px] transition-colors">Buy</a></li>
+          <li><a href="#about" className="text-[11px] font-semibold tracking-[.14em] uppercase text-[#3a6199] hover:text-[#0f2d56] hover:border-b hover:border-[#1a4a8a] pb-[2px] transition-colors">About us</a></li>
+          <li>
+            <Link href="/investments" className="text-[11px] font-semibold tracking-[.14em] uppercase text-[#3a6199] hover:text-[#0f2d56] hover:border-b hover:border-[#1a4a8a] pb-[2px] transition-colors">
+              Investments
+            </Link>
+          </li>
+          <li><a href="#contact-info" className="text-[11px] font-semibold tracking-[.14em] uppercase text-[#3a6199] hover:text-[#0f2d56] hover:border-b hover:border-[#1a4a8a] pb-[2px] transition-colors">Contact</a></li>
         </ul>
       </nav>
 
