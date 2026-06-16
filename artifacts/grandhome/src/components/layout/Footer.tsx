@@ -51,7 +51,7 @@ export function Footer() {
         </div>
       </div>
       <div className="border-t border-blue-900/60 pt-5 text-[11px] font-sans text-blue-500 flex justify-between">
-        <span>&copy; 2026 Grandhome Investments. All rights reserved.</span>
+        <span>&copy; 2026 Grand Homes. All rights reserved.</span>
         <div className="flex gap-5">
           <a href="#" className="hover:text-blue-200 transition-colors">Privacy</a>
           <a href="#" className="hover:text-blue-200 transition-colors">Terms</a>

@@ -24,7 +24,7 @@ export function Hero() {
           Luxury Real Estate
         </p>
         <h1 className="font-serif text-[54px] font-semibold tracking-[.02em] leading-[1.05] mb-3">
-          Grandhome Investments
+          Grand Homes
         </h1>
         <p className="text-[12px] font-sans font-light tracking-[.22em] uppercase text-blue-200 mb-8">
           Your dream home awaits
