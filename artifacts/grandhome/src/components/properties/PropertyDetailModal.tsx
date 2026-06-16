@@ -6,6 +6,7 @@ import {
   getGetFeaturedPropertiesQueryKey,
   getListPropertiesQueryKey,
 } from "@workspace/api-client-react";
+import { useAdmin } from "@/context/AdminContext";
 
 type Property = {
   id: number;
@@ -56,6 +57,7 @@ function toDateInput(d: string | null | undefined) {
 }
 
 export function PropertyDetailModal({ property: initialProp, onClose }: Props) {
+  const { isAdmin } = useAdmin();
   const [p, setP] = useState<Property | null>(initialProp);
   const [photoIndex, setPhotoIndex] = useState(0);
   const [editing, setEditing] = useState(false);
@@ -187,7 +189,7 @@ export function PropertyDetailModal({ property: initialProp, onClose }: Props) {
             <h2 className="font-serif text-[22px] font-semibold text-white leading-tight">{p.name}</h2>
           </div>
           <div className="flex items-center gap-2">
-            {!editing && (
+            {!editing && isAdmin && (
               <button
                 onClick={openEdit}
                 className="h-8 px-4 border border-blue-400/50 text-blue-200 text-[10px] font-sans font-semibold tracking-[.12em] uppercase hover:bg-white/10 transition-colors"
@@ -305,19 +307,23 @@ export function PropertyDetailModal({ property: initialProp, onClose }: Props) {
                   >
                     Enquire
                   </button>
-                  <button
-                    onClick={openEdit}
-                    className="h-[40px] px-5 border border-[#1a4a8a] text-[#1a4a8a] text-[10px] font-sans font-semibold tracking-[.1em] uppercase hover:bg-blue-50 transition-colors"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={handleDelete}
-                    disabled={deleteProperty.isPending}
-                    className="h-[40px] px-5 border border-red-200 text-red-500 text-[10px] font-sans font-semibold tracking-[.1em] uppercase hover:bg-red-50 transition-colors disabled:opacity-50"
-                  >
-                    Remove
-                  </button>
+                  {isAdmin && (
+                    <button
+                      onClick={openEdit}
+                      className="h-[40px] px-5 border border-[#1a4a8a] text-[#1a4a8a] text-[10px] font-sans font-semibold tracking-[.1em] uppercase hover:bg-blue-50 transition-colors"
+                    >
+                      Edit
+                    </button>
+                  )}
+                  {isAdmin && (
+                    <button
+                      onClick={handleDelete}
+                      disabled={deleteProperty.isPending}
+                      className="h-[40px] px-5 border border-red-200 text-red-500 text-[10px] font-sans font-semibold tracking-[.1em] uppercase hover:bg-red-50 transition-colors disabled:opacity-50"
+                    >
+                      Remove
+                    </button>
+                  )}
                 </div>
               </>
             )}
