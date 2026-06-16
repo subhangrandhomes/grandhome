@@ -117,6 +117,7 @@ export function Navbar() {
             { label: "Our listings", href: "#listings" },
             { label: "Buy", href: "#listings" },
             { label: "About us", href: "#about" },
+            { label: "Investments", href: "/investments" },
             { label: "Contact", href: "#contact-info" },
           ].map((item) => (
             <li key={item.label}>
