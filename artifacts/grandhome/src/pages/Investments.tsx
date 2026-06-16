@@ -97,6 +97,13 @@ function AdminPanel() {
     await loadData();
   };
 
+  const handleRemove = async (id: number) => {
+    if (!confirm("Permanently remove this investor and all their data?")) return;
+    await adminFetch(`/api/admin/investors/${id}`, { method: "DELETE" });
+    if (expanded === id) setExpanded(null);
+    await loadData();
+  };
+
   const toggleProperty = async (investorId: number, propertyId: number) => {
     const assigned = assignedMap[investorId] ?? [];
     if (assigned.includes(propertyId)) {
@@ -165,7 +172,15 @@ function AdminPanel() {
                   </button>
                   {expanded === inv.id && (
                     <div className="p-4 bg-white">
-                      <p className="text-[10px] font-sans font-semibold tracking-[.15em] uppercase text-[#6b88aa] mb-3">Assign properties — check to include</p>
+                      <div className="flex items-center justify-between mb-3">
+                        <p className="text-[10px] font-sans font-semibold tracking-[.15em] uppercase text-[#6b88aa]">Assign properties — check to include</p>
+                        <button
+                          onClick={() => handleRemove(inv.id)}
+                          className="h-7 px-3 border border-red-300 text-red-600 text-[10px] font-sans font-semibold tracking-[.1em] uppercase hover:bg-red-50 transition-colors"
+                        >
+                          Remove investor
+                        </button>
+                      </div>
                       {allProperties.length === 0
                         ? <p className="text-[13px] font-sans text-[#6b88aa]">No properties in the system yet.</p>
                         : <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">

@@ -125,6 +125,19 @@ router.post("/admin/investors/:id/properties", (req, res, next) => {
   res.json({ ok: true });
 });
 
+// Admin: delete investor entirely
+router.delete("/admin/investors/:id", (req, res, next) => {
+  const pw = (req.headers["x-admin-password"] as string | undefined);
+  if (!pw || pw !== process.env.ADMIN_PASSWORD) { res.status(401).json({ error: "Unauthorized" }); return; }
+  next();
+}, async (req, res) => {
+  const investorId = parseInt(req.params.id);
+  await db.delete(investorPropertiesTable).where(eq(investorPropertiesTable.investorId, investorId));
+  await db.delete(investorSessionsTable).where(eq(investorSessionsTable.investorId, investorId));
+  await db.delete(investorsTable).where(eq(investorsTable.id, investorId));
+  res.json({ ok: true });
+});
+
 // Admin: unassign property from investor
 router.delete("/admin/investors/:id/properties/:propertyId", (req, res, next) => {
   const pw = (req.headers["x-admin-password"] as string | undefined);
