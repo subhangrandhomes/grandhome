@@ -4,21 +4,27 @@ export function StatsBand() {
   const { data: stats } = useGetPropertyStats();
 
   const items = [
-    { num: stats ? `${stats.totalListings}+` : "250+", label: "Homes sold" },
+    { num: stats ? `${stats.totalListings}+` : "250+", label: "Homes delivered" },
     { num: "110%", label: "Sale-to-list price ratio" },
     { num: "11", label: "Avg. days on market" },
     { num: "$250M+", label: "Total volume sold" },
   ];
 
   return (
-    <div className="grid grid-cols-4" style={{ background: "linear-gradient(90deg, #0f2d56 0%, #1a4a8a 100%)" }}>
+    <div
+      className="grid grid-cols-4"
+      style={{ background: "linear-gradient(90deg, #0c2548 0%, #1a4a8a 100%)" }}
+    >
       {items.map((item, i) => (
         <div
           key={i}
-          className="py-12 px-5 text-center border-r border-white/10 last:border-r-0"
+          className="relative py-12 px-6 text-center"
         >
-          <div className="font-serif text-[44px] font-semibold leading-none mb-2 text-white">{item.num}</div>
-          <div className="text-[10px] font-sans font-medium tracking-[.2em] uppercase text-blue-200">
+          {i < items.length - 1 && (
+            <div className="absolute right-0 top-1/4 bottom-1/4 w-px bg-white/10" />
+          )}
+          <div className="font-serif text-[46px] font-semibold leading-none mb-2 text-white">{item.num}</div>
+          <div className="text-[9px] font-sans font-semibold tracking-[.22em] uppercase text-blue-300">
             {item.label}
           </div>
         </div>

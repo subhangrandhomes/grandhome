@@ -1,358 +1,173 @@
-import { useState, useEffect, useCallback } from "react";
-import { useAdmin } from "@/context/AdminContext";
-import { useInvestor } from "@/context/InvestorContext";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 
-type Property = {
-  id: number; name: string; address: string; price: string;
-  beds: number; baths: number; sqft: number; type: string;
-  mode: string; status: string; photos: string[];
-  projectStartDate?: string | null; projectCompletionDate?: string | null;
-};
-type InvestorRecord = { id: number; username: string; status: string; createdAt: string };
+const WHY_ITEMS = [
+  {
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-7 h-7">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z" />
+      </svg>
+    ),
+    title: "New Construction Focus",
+    body: "We specialise in off-market new construction homes, giving investors first access to properties before they hit the public market.",
+  },
+  {
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-7 h-7">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+      </svg>
+    ),
+    title: "Strong Returns",
+    body: "Our portfolio consistently delivers above-market returns. We target properties with strong appreciation potential and rental yield.",
+  },
+  {
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-7 h-7">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+      </svg>
+    ),
+    title: "Trusted & Transparent",
+    body: "Every deal is presented with full financials and clear projections. We believe in complete transparency so you can invest with confidence.",
+  },
+  {
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-7 h-7">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
+      </svg>
+    ),
+    title: "Exclusive Network",
+    body: "Join a private network of investors who receive off-market opportunities, early project previews, and direct access to our acquisition team.",
+  },
+];
 
-const TYPE_BG: Record<string, string> = {
-  House: "linear-gradient(135deg, #c2d4e8 0%, #8faac8 100%)",
-  Condo: "linear-gradient(135deg, #b8c8e0 0%, #7a9abf 100%)",
-  Townhouse: "linear-gradient(135deg, #c8d8ec 0%, #90aacf 100%)",
-  Apartment: "linear-gradient(135deg, #bdd0e8 0%, #85a5c5 100%)",
-};
+const HOW_STEPS = [
+  { num: "01", title: "Express Interest", body: "Reach out to our investment team by phone or email. We'll schedule a personal consultation to learn your goals." },
+  { num: "02", title: "Review Opportunities", body: "We'll share current projects that match your investment profile — with full details, locations, and projected returns." },
+  { num: "03", title: "Commit & Close", body: "Once you've selected a project, our team handles all paperwork and guides you through a smooth closing process." },
+  { num: "04", title: "Grow Your Portfolio", body: "As a Grand Homes investor, you'll receive ongoing updates and first access to future off-market opportunities." },
+];
 
-function fmt(n: number) { return n.toLocaleString("en-US"); }
-
-function PropertyCard({ p }: { p: Property }) {
-  const photo = p.photos?.[0] ?? null;
-  const isCompleted = p.status === "completed";
+export default function Investments() {
   return (
-    <div className="bg-white border border-blue-100 flex flex-col overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-      <div className="aspect-[4/3] relative">
-        {photo
-          ? <img src={photo} alt={p.name} className="w-full h-full object-cover" />
-          : <div className="w-full h-full" style={{ background: TYPE_BG[p.type] ?? TYPE_BG.House }} />}
-        <span className={`absolute top-2 right-2 text-[9px] font-sans font-bold tracking-[.15em] uppercase px-2 py-[2px] ${isCompleted ? "bg-green-500/90 text-white" : "bg-amber-400/90 text-white"}`}>
-          {isCompleted ? "Completed" : "Ongoing"}
-        </span>
-      </div>
-      <div className="p-4 flex flex-col gap-1">
-        <p className="font-serif text-[18px] font-semibold text-[#0f2d56] leading-tight">{p.name}</p>
-        <p className="text-[11px] font-sans text-[#6b88aa]">{p.address}</p>
-        <p className="font-serif text-[20px] font-bold text-[#1a4a8a] mt-1">{p.price}</p>
-        <div className="flex gap-4 mt-1">
-          {[{ v: p.beds, l: "Beds" }, { v: p.baths, l: "Baths" }, { v: fmt(p.sqft), l: "Sq ft" }].map((s) => (
-            <div key={s.l} className="text-center">
-              <div className="font-serif text-[15px] font-semibold text-[#0f2d56]">{s.v}</div>
-              <div className="text-[9px] font-sans uppercase tracking-[.1em] text-[#6b88aa]">{s.l}</div>
-            </div>
-          ))}
+    <div className="min-h-screen flex flex-col bg-white">
+      <Navbar />
+
+      {/* Hero */}
+      <section className="relative py-24 flex items-center justify-center text-center overflow-hidden"
+        style={{ background: "linear-gradient(155deg, #1a4a8a 0%, #0f2d56 50%, #071a35 100%)" }}>
+        <div className="absolute inset-0 opacity-[0.04]">
+          <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+                <path d="M 60 0 L 0 0 0 60" fill="none" stroke="white" strokeWidth="0.5"/>
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#grid)" />
+          </svg>
         </div>
-      </div>
-    </div>
-  );
-}
-
-// ── Admin Panel ─────────────────────────────────────────────────────────────
-function AdminPanel() {
-  const { adminFetch } = useAdmin();
-  const [investors, setInvestors] = useState<InvestorRecord[]>([]);
-  const [allProperties, setAllProperties] = useState<Property[]>([]);
-  const [assignedMap, setAssignedMap] = useState<Record<number, number[]>>({});
-  const [expanded, setExpanded] = useState<number | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  const loadData = useCallback(async () => {
-    setLoading(true);
-    const [invRes, propRes] = await Promise.all([
-      adminFetch("/api/admin/investors"),
-      fetch("/api/properties"),
-    ]);
-    const invs = await invRes.json() as InvestorRecord[];
-    const props = await propRes.json() as { properties: Property[] };
-    setInvestors(invs);
-    setAllProperties(props.properties ?? []);
-    setLoading(false);
-  }, [adminFetch]);
-
-  useEffect(() => { void loadData(); }, [loadData]);
-
-  const loadAssigned = useCallback(async (investorId: number) => {
-    const res = await adminFetch(`/api/admin/investors/${investorId}/properties`);
-    const ids = await res.json() as number[];
-    setAssignedMap((m) => ({ ...m, [investorId]: ids }));
-  }, [adminFetch]);
-
-  const handleExpand = async (id: number) => {
-    if (expanded === id) { setExpanded(null); return; }
-    setExpanded(id);
-    await loadAssigned(id);
-  };
-
-  const handleApprove = async (id: number) => {
-    await adminFetch(`/api/admin/investors/${id}/approve`, { method: "PUT" });
-    await loadData();
-  };
-
-  const handleReject = async (id: number) => {
-    await adminFetch(`/api/admin/investors/${id}/reject`, { method: "PUT" });
-    await loadData();
-  };
-
-  const handleRemove = async (id: number) => {
-    if (!confirm("Permanently remove this investor and all their data?")) return;
-    await adminFetch(`/api/admin/investors/${id}`, { method: "DELETE" });
-    if (expanded === id) setExpanded(null);
-    await loadData();
-  };
-
-  const toggleProperty = async (investorId: number, propertyId: number) => {
-    const assigned = assignedMap[investorId] ?? [];
-    if (assigned.includes(propertyId)) {
-      await adminFetch(`/api/admin/investors/${investorId}/properties/${propertyId}`, { method: "DELETE" });
-    } else {
-      await adminFetch(`/api/admin/investors/${investorId}/properties`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ propertyId }),
-      });
-    }
-    await loadAssigned(investorId);
-  };
-
-  const pending = investors.filter((i) => i.status === "pending");
-  const approved = investors.filter((i) => i.status === "approved");
-  const rejected = investors.filter((i) => i.status === "rejected");
-
-  if (loading) return <div className="text-center py-16 text-[#6b88aa] font-sans text-[13px]">Loading…</div>;
-
-  return (
-    <div className="max-w-[860px] mx-auto px-6 py-10 flex flex-col gap-10">
-      <div>
-        <p className="text-[10px] font-sans font-semibold tracking-[.2em] uppercase text-[#3a7bd5] mb-1">Admin</p>
-        <h2 className="font-serif text-[28px] text-[#0f2d56]">Investor Management</h2>
-      </div>
-
-      {/* Pending */}
-      <section>
-        <h3 className="font-serif text-[18px] text-[#0f2d56] mb-3 flex items-center gap-2">
-          Pending Requests
-          {pending.length > 0 && <span className="bg-amber-400 text-white text-[10px] font-sans font-bold px-2 py-[1px] rounded-full">{pending.length}</span>}
-        </h3>
-        {pending.length === 0
-          ? <p className="text-[13px] font-sans text-[#6b88aa]">No pending requests.</p>
-          : <div className="flex flex-col gap-2">
-              {pending.map((inv) => (
-                <div key={inv.id} className="flex items-center justify-between bg-amber-50 border border-amber-200 px-4 py-3">
-                  <div>
-                    <span className="font-sans font-semibold text-[14px] text-[#0f2d56]">{inv.username}</span>
-                    <span className="ml-3 text-[11px] font-sans text-[#6b88aa]">{new Date(inv.createdAt).toLocaleDateString()}</span>
-                  </div>
-                  <div className="flex gap-2">
-                    <button onClick={() => handleApprove(inv.id)} className="h-8 px-4 bg-green-600 text-white text-[10px] font-sans font-semibold tracking-[.1em] uppercase hover:bg-green-700 transition-colors">Approve</button>
-                    <button onClick={() => handleReject(inv.id)} className="h-8 px-4 border border-red-300 text-red-600 text-[10px] font-sans font-semibold tracking-[.1em] uppercase hover:bg-red-50 transition-colors">Reject</button>
-                  </div>
-                </div>
-              ))}
-            </div>}
-      </section>
-
-      {/* Approved — property assignment */}
-      <section>
-        <h3 className="font-serif text-[18px] text-[#0f2d56] mb-3">Approved Investors</h3>
-        {approved.length === 0
-          ? <p className="text-[13px] font-sans text-[#6b88aa]">No approved investors yet.</p>
-          : <div className="flex flex-col gap-2">
-              {approved.map((inv) => (
-                <div key={inv.id} className="border border-blue-100 overflow-hidden">
-                  <button
-                    onClick={() => handleExpand(inv.id)}
-                    className="w-full flex items-center justify-between px-4 py-3 bg-[#f0f5ff] hover:bg-[#e8effe] transition-colors"
-                  >
-                    <span className="font-sans font-semibold text-[14px] text-[#0f2d56]">{inv.username}</span>
-                    <span className="text-[11px] font-sans text-[#6b88aa]">{expanded === inv.id ? "▲ Close" : "▼ Manage properties"}</span>
-                  </button>
-                  {expanded === inv.id && (
-                    <div className="p-4 bg-white">
-                      <div className="flex items-center justify-between mb-3">
-                        <p className="text-[10px] font-sans font-semibold tracking-[.15em] uppercase text-[#6b88aa]">Assign properties — check to include</p>
-                        <button
-                          onClick={() => handleRemove(inv.id)}
-                          className="h-7 px-3 border border-red-300 text-red-600 text-[10px] font-sans font-semibold tracking-[.1em] uppercase hover:bg-red-50 transition-colors"
-                        >
-                          Remove investor
-                        </button>
-                      </div>
-                      {allProperties.length === 0
-                        ? <p className="text-[13px] font-sans text-[#6b88aa]">No properties in the system yet.</p>
-                        : <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                            {allProperties.map((p) => {
-                              const checked = (assignedMap[inv.id] ?? []).includes(p.id);
-                              return (
-                                <label key={p.id} className={`flex items-center gap-3 px-3 py-2 border cursor-pointer transition-colors ${checked ? "border-[#1a4a8a] bg-blue-50" : "border-blue-100 hover:bg-[#f8faff]"}`}>
-                                  <input type="checkbox" checked={checked} onChange={() => toggleProperty(inv.id, p.id)} className="accent-[#1a4a8a] w-4 h-4 flex-shrink-0" />
-                                  <div className="min-w-0">
-                                    <p className="font-sans font-semibold text-[12px] text-[#0f2d56] truncate">{p.name}</p>
-                                    <p className="font-sans text-[11px] text-[#6b88aa] truncate">{p.address}</p>
-                                  </div>
-                                </label>
-                              );
-                            })}
-                          </div>}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>}
-      </section>
-
-      {/* Rejected */}
-      {rejected.length > 0 && (
-        <section>
-          <h3 className="font-serif text-[18px] text-[#0f2d56] mb-3">Rejected</h3>
-          <div className="flex flex-col gap-2">
-            {rejected.map((inv) => (
-              <div key={inv.id} className="flex items-center justify-between bg-red-50 border border-red-100 px-4 py-3">
-                <span className="font-sans font-semibold text-[14px] text-[#0f2d56]">{inv.username}</span>
-                <button onClick={() => handleApprove(inv.id)} className="h-8 px-4 border border-green-400 text-green-700 text-[10px] font-sans font-semibold tracking-[.1em] uppercase hover:bg-green-50 transition-colors">Re-approve</button>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-    </div>
-  );
-}
-
-// ── Investor Portal ──────────────────────────────────────────────────────────
-function InvestorPortal() {
-  const { investor, login, register, logout } = useInvestor();
-  const [tab, setTab] = useState<"login" | "register">("login");
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [msg, setMsg] = useState<{ text: string; ok: boolean } | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [properties, setProperties] = useState<Property[]>([]);
-  const [loadingProps, setLoadingProps] = useState(false);
-
-  useEffect(() => {
-    if (!investor) return;
-    setLoadingProps(true);
-    const token = localStorage.getItem("investor_token") ?? "";
-    fetch("/api/investors/me/properties", { headers: { Authorization: `Bearer ${token}` } })
-      .then((r) => r.json())
-      .then((data: Property[]) => setProperties(data))
-      .finally(() => setLoadingProps(false));
-  }, [investor]);
-
-  const handleSubmit = async () => {
-    if (!username || !password) { setMsg({ text: "Please fill in all fields.", ok: false }); return; }
-    setLoading(true); setMsg(null);
-    if (tab === "login") {
-      const res = await login(username, password);
-      if (!res.ok) setMsg({ text: res.error ?? "Login failed.", ok: false });
-    } else {
-      const res = await register(username, password);
-      if (res.ok) { setMsg({ text: "Request submitted! An admin will review your account.", ok: true }); setUsername(""); setPassword(""); }
-      else setMsg({ text: res.error ?? "Registration failed.", ok: false });
-    }
-    setLoading(false);
-  };
-
-  if (investor) {
-    return (
-      <div className="max-w-[900px] mx-auto px-6 py-10">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <p className="text-[10px] font-sans font-semibold tracking-[.2em] uppercase text-[#3a7bd5] mb-1">Investment Portal</p>
-            <h2 className="font-serif text-[28px] text-[#0f2d56]">Welcome, {investor.username}</h2>
-          </div>
-          <button onClick={logout} className="h-9 px-4 border border-blue-200 text-[#3a6199] text-[10px] font-sans font-semibold tracking-[.12em] uppercase hover:border-[#0f2d56] hover:text-[#0f2d56] transition-colors">Sign out</button>
-        </div>
-        {loadingProps
-          ? <p className="text-center text-[13px] font-sans text-[#6b88aa] py-10">Loading your properties…</p>
-          : properties.length === 0
-            ? <div className="text-center py-16 border border-dashed border-blue-200">
-                <p className="font-serif text-[20px] text-[#0f2d56] mb-2">No properties assigned yet</p>
-                <p className="text-[13px] font-sans text-[#6b88aa]">Contact the admin to have your properties linked to your account.</p>
-              </div>
-            : <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
-                {properties.map((p) => <PropertyCard key={p.id} p={p} />)}
-              </div>}
-      </div>
-    );
-  }
-
-  return (
-    <div className="max-w-[420px] mx-auto px-6 py-16">
-      <div className="mb-8 text-center">
-        <p className="text-[10px] font-sans font-semibold tracking-[.2em] uppercase text-[#3a7bd5] mb-2">Investor Portal</p>
-        <h2 className="font-serif text-[28px] text-[#0f2d56] mb-2">Your Investments</h2>
-        <p className="text-[13px] font-sans text-[#6b88aa]">Log in to view the properties linked to your account, or request access.</p>
-      </div>
-
-      {/* Tabs */}
-      <div className="flex border-b border-blue-100 mb-6">
-        {(["login", "register"] as const).map((t) => (
-          <button
-            key={t}
-            onClick={() => { setTab(t); setMsg(null); }}
-            className={`flex-1 pb-3 text-[11px] font-sans font-semibold tracking-[.14em] uppercase transition-colors border-b-2 -mb-[1px] ${tab === t ? "border-[#1a4a8a] text-[#1a4a8a]" : "border-transparent text-[#6b88aa] hover:text-[#3a6199]"}`}
+        <div className="relative z-10 max-w-2xl mx-auto px-8">
+          <p className="text-[10px] font-sans font-semibold tracking-[.35em] uppercase text-blue-300 mb-4">Investment Opportunities</p>
+          <h1 className="font-serif text-[52px] font-semibold text-white leading-[1.05] mb-5">
+            Build Wealth Through Real Estate
+          </h1>
+          <p className="text-[14px] font-sans text-blue-200 leading-[1.85] mb-9 max-w-lg mx-auto">
+            Grand Homes partners with private investors to acquire and develop premium residential
+            properties across New Jersey. Join our exclusive network and grow your portfolio with confidence.
+          </p>
+          <a
+            href="#contact-info"
+            className="inline-block h-12 px-10 bg-white text-[#0f2d56] text-[11px] font-sans font-semibold tracking-[.16em] uppercase hover:bg-blue-50 transition-colors leading-[48px]"
           >
-            {t === "login" ? "Sign In" : "Request Access"}
-          </button>
+            Contact our team
+          </a>
+        </div>
+      </section>
+
+      {/* Stats row */}
+      <div className="grid grid-cols-4 border-b border-blue-100">
+        {[
+          { num: "$250M+", label: "Total volume" },
+          { num: "110%", label: "Avg. sale-to-list ratio" },
+          { num: "15+", label: "Years experience" },
+          { num: "250+", label: "Homes delivered" },
+        ].map((s, i) => (
+          <div key={i} className="py-10 text-center border-r border-blue-100 last:border-r-0">
+            <div className="font-serif text-[38px] font-semibold text-[#0f2d56] leading-none mb-1">{s.num}</div>
+            <div className="text-[10px] font-sans font-medium tracking-[.18em] uppercase text-[#6b88aa]">{s.label}</div>
+          </div>
         ))}
       </div>
 
-      <div className="flex flex-col gap-4">
-        <div className="flex flex-col gap-1">
-          <label className="text-[9px] font-sans font-semibold tracking-[.14em] uppercase text-[#6b88aa]">Username</label>
-          <input
-            value={username} onChange={(e) => setUsername(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
-            placeholder="your username"
-            className="h-9 border border-blue-200 px-3 text-[12px] font-sans text-[#0f2d56] outline-none focus:border-[#1a4a8a] transition-colors w-full"
-          />
+      {/* Why invest */}
+      <section className="py-20 px-20 bg-[#f8faff]">
+        <div className="text-center mb-14">
+          <p className="text-[10px] font-sans font-semibold tracking-[.3em] uppercase text-[#3a7bd5] mb-2">The Grand Homes Edge</p>
+          <h2 className="font-serif text-[34px] font-semibold text-[#0f2d56]">Why Invest With Us</h2>
+          <div className="w-10 h-[2px] bg-[#3a7bd5] mx-auto mt-4" />
         </div>
-        <div className="flex flex-col gap-1">
-          <label className="text-[9px] font-sans font-semibold tracking-[.14em] uppercase text-[#6b88aa]">Password</label>
-          <input
-            type="password" value={password} onChange={(e) => setPassword(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
-            placeholder="••••••••"
-            className="h-9 border border-blue-200 px-3 text-[12px] font-sans text-[#0f2d56] outline-none focus:border-[#1a4a8a] transition-colors w-full"
-          />
+        <div className="grid grid-cols-2 gap-8 max-w-5xl mx-auto">
+          {WHY_ITEMS.map((item, i) => (
+            <div key={i} className="bg-white border border-blue-100 p-8 flex gap-6 hover:shadow-md transition-shadow">
+              <div className="text-[#1a4a8a] flex-shrink-0 mt-1">{item.icon}</div>
+              <div>
+                <h3 className="font-serif text-[20px] font-semibold text-[#0f2d56] mb-2">{item.title}</h3>
+                <p className="text-[13px] font-sans leading-[1.8] text-[#4a6080]">{item.body}</p>
+              </div>
+            </div>
+          ))}
         </div>
-        {tab === "register" && (
-          <p className="text-[11px] font-sans text-[#6b88aa] leading-relaxed">Your request will be reviewed by an admin before you can log in.</p>
-        )}
-        {msg && (
-          <p className={`text-[12px] font-sans px-3 py-2 border ${msg.ok ? "bg-green-50 border-green-200 text-green-700" : "bg-red-50 border-red-200 text-red-600"}`}>{msg.text}</p>
-        )}
-        <button
-          onClick={handleSubmit} disabled={loading}
-          className="h-10 bg-[#1a4a8a] text-white text-[11px] font-sans font-semibold tracking-[.14em] uppercase hover:bg-[#0f2d56] transition-colors disabled:opacity-50"
-        >
-          {loading ? "Please wait…" : tab === "login" ? "Sign In" : "Request Access"}
-        </button>
-      </div>
-    </div>
-  );
-}
+      </section>
 
-// ── Page ─────────────────────────────────────────────────────────────────────
-export default function Investments() {
-  const { isAdmin } = useAdmin();
+      {/* How it works */}
+      <section className="py-20 px-20 bg-white">
+        <div className="text-center mb-14">
+          <p className="text-[10px] font-sans font-semibold tracking-[.3em] uppercase text-[#3a7bd5] mb-2">Simple Process</p>
+          <h2 className="font-serif text-[34px] font-semibold text-[#0f2d56]">How It Works</h2>
+          <div className="w-10 h-[2px] bg-[#3a7bd5] mx-auto mt-4" />
+        </div>
+        <div className="grid grid-cols-4 gap-6 max-w-5xl mx-auto">
+          {HOW_STEPS.map((step, i) => (
+            <div key={i} className="text-center relative">
+              {i < HOW_STEPS.length - 1 && (
+                <div className="hidden md:block absolute top-6 left-[60%] w-[80%] h-[1px] bg-blue-200" />
+              )}
+              <div className="w-12 h-12 rounded-full border-2 border-[#1a4a8a] flex items-center justify-center mx-auto mb-5 bg-white relative z-10">
+                <span className="font-sans text-[11px] font-bold text-[#1a4a8a] tracking-[.04em]">{step.num}</span>
+              </div>
+              <h3 className="font-serif text-[17px] font-semibold text-[#0f2d56] mb-2">{step.title}</h3>
+              <p className="text-[12px] font-sans leading-[1.8] text-[#6b88aa]">{step.body}</p>
+            </div>
+          ))}
+        </div>
+      </section>
 
-  return (
-    <div className="min-h-screen flex flex-col bg-[#f8faff]">
-      <Navbar />
-      <div style={{ background: "linear-gradient(90deg, #0f2d56 0%, #1a4a8a 100%)" }} className="px-10 py-10">
-        <p className="text-[10px] font-sans font-semibold tracking-[.3em] uppercase text-blue-300 mb-2">Grand Homes</p>
-        <h1 className="font-serif text-[38px] font-semibold text-white leading-tight">Investments</h1>
-        <p className="text-[13px] font-sans text-blue-200 mt-2">Private portal for Grand Homes investors.</p>
-      </div>
-      <div className="flex-1">
-        {isAdmin ? <AdminPanel /> : <InvestorPortal />}
-      </div>
+      {/* CTA band */}
+      <section
+        className="py-16 px-20 text-white text-center"
+        style={{ background: "linear-gradient(90deg, #0f2d56 0%, #1a4a8a 100%)" }}
+      >
+        <p className="text-[10px] font-sans font-semibold tracking-[.3em] uppercase text-blue-300 mb-3">Ready to invest?</p>
+        <h2 className="font-serif text-[34px] font-semibold mb-4">Let's Talk About Your Goals</h2>
+        <p className="text-[13px] font-sans text-blue-200 leading-[1.8] max-w-xl mx-auto mb-8">
+          Our investment team is available to walk you through current opportunities
+          and answer any questions you have. No obligation — just a conversation.
+        </p>
+        <div className="flex gap-4 justify-center">
+          <a
+            href="mailto:haroon.grandhomes@gmail.com"
+            className="h-11 px-9 border border-white/70 bg-white/10 text-white text-[11px] font-sans font-semibold tracking-[.14em] uppercase hover:bg-white/20 transition-colors leading-[44px] inline-block"
+          >
+            Email us
+          </a>
+          <a
+            href="tel:7325265695"
+            className="h-11 px-9 bg-white text-[#0f2d56] text-[11px] font-sans font-semibold tracking-[.14em] uppercase hover:bg-blue-50 transition-colors leading-[44px] inline-block"
+          >
+            Call 732-526-5695
+          </a>
+        </div>
+      </section>
+
       <Footer />
     </div>
   );

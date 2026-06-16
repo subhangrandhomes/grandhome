@@ -4,44 +4,70 @@ export function Hero() {
   };
 
   return (
-    <section className="relative h-[420px] overflow-hidden flex items-center justify-center text-center">
+    <section className="relative overflow-hidden flex items-center justify-center text-center" style={{ minHeight: "560px" }}>
+      {/* Background gradient */}
       <div
         className="absolute inset-0"
-        style={{ background: "linear-gradient(155deg, #1a4a8a 0%, #0f2d56 45%, #071a35 100%)" }}
+        style={{ background: "linear-gradient(160deg, #1a4a8a 0%, #0c2548 40%, #060f1e 100%)" }}
       />
-      <div className="absolute inset-0" style={{ background: "rgba(7,26,53,.25)" }} />
 
-      {/* Subtle geometric watermark */}
-      <div className="absolute inset-0 flex items-center justify-center opacity-5">
-        <svg width="600" height="400" viewBox="0 0 600 400" fill="none">
-          <rect x="1" y="1" width="598" height="398" stroke="white" strokeWidth="1" fill="none"/>
-          <rect x="30" y="30" width="540" height="340" stroke="white" strokeWidth="0.5" fill="none"/>
+      {/* Grid pattern overlay */}
+      <div className="absolute inset-0 opacity-[0.06]">
+        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="hero-grid" width="80" height="80" patternUnits="userSpaceOnUse">
+              <path d="M 80 0 L 0 0 0 80" fill="none" stroke="white" strokeWidth="0.8"/>
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#hero-grid)" />
         </svg>
       </div>
 
-      <div className="relative z-10 text-white">
-        <p className="text-[10px] font-sans font-medium tracking-[.35em] uppercase text-blue-300 mb-4">
-          Luxury Real Estate
+      {/* Glow accent */}
+      <div
+        className="absolute top-[-120px] left-1/2 -translate-x-1/2 w-[700px] h-[500px] rounded-full opacity-[0.12] blur-[80px]"
+        style={{ background: "radial-gradient(circle, #4a90d9 0%, transparent 70%)" }}
+      />
+
+      {/* Content */}
+      <div className="relative z-10 text-white px-6 max-w-3xl mx-auto py-24">
+        <p className="text-[10px] font-sans font-semibold tracking-[.4em] uppercase text-blue-300 mb-5">
+          Residential Construction &amp; Investments
         </p>
-        <h1 className="font-serif text-[54px] font-semibold tracking-[.02em] leading-[1.05] mb-3">
+        <h1 className="font-serif text-[58px] font-semibold tracking-[.01em] leading-[1.03] mb-5">
           Grand Homes
         </h1>
-        <p className="text-[12px] font-sans font-light tracking-[.22em] uppercase text-blue-200 mb-8">
-          Your dream home awaits
+        <p className="text-[15px] font-sans font-light leading-[1.75] text-blue-200 mb-10 max-w-xl mx-auto">
+          New Jersey's premier residential developer. We build, list, and sell exceptional homes with unmatched expertise and dedication.
         </p>
+
         <div className="flex gap-4 justify-center">
           <button
             onClick={() => scrollTo("listings")}
-            className="h-11 px-8 text-[11px] font-sans font-semibold tracking-[.14em] uppercase bg-white text-[#0f2d56] hover:bg-blue-50 transition-colors"
+            className="h-12 px-9 text-[11px] font-sans font-semibold tracking-[.15em] uppercase bg-white text-[#0f2d56] hover:bg-blue-50 transition-colors shadow-lg"
           >
-            All properties
+            Explore Properties
           </button>
           <button
-            onClick={() => scrollTo("contact")}
-            className="h-11 px-8 text-[11px] font-sans font-semibold tracking-[.14em] uppercase border border-white/70 bg-white/10 text-white hover:bg-white/20 transition-colors"
+            onClick={() => scrollTo("contact-info")}
+            className="h-12 px-9 text-[11px] font-sans font-semibold tracking-[.15em] uppercase border border-white/50 text-white hover:bg-white/10 transition-colors"
           >
-            Search
+            Contact Us
           </button>
+        </div>
+
+        {/* Trust indicators */}
+        <div className="flex justify-center gap-10 mt-14 pt-10 border-t border-white/10">
+          {[
+            { num: "250+", label: "Homes delivered" },
+            { num: "$250M+", label: "Total volume" },
+            { num: "15+", label: "Years experience" },
+          ].map((s, i) => (
+            <div key={i} className="text-center">
+              <div className="font-serif text-[26px] font-semibold text-white leading-none mb-1">{s.num}</div>
+              <div className="text-[9px] font-sans tracking-[.18em] uppercase text-blue-400">{s.label}</div>
+            </div>
+          ))}
         </div>
       </div>
     </section>
