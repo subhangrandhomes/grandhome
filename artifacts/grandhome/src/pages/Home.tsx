@@ -12,8 +12,8 @@ export default function Home() {
       <Navbar />
       <main>
         <Hero />
-        <FeaturedListings />
         <WhoWeAre />
+        <FeaturedListings />
         <PropertySearch />
         <CTAStrip />
       </main>
