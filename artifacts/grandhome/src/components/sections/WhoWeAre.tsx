@@ -6,7 +6,7 @@ const features = [
       </svg>
     ),
     title: "Halal & Safe Investments",
-    body: "We offer a safe investment environment keeping Islamic values in mind. The localities in which the houses are invested in are well-known areas of central NJ for ease of selling. You also become partners in the LLC that you invested in to assure complete transparency.",
+    body: "We provide a secure investment environment fully aligned with Islamic values and Sharia-compliant principles. Our projects are strategically located in established central New Jersey communities with strong resale demand. Every investor becomes a named partner in the project LLC, ensuring complete financial transparency from acquisition through to closing.",
   },
   {
     icon: (
@@ -15,7 +15,7 @@ const features = [
       </svg>
     ),
     title: "A Proven Approach",
-    body: "A proven approach based on years of experience. We give timely updates, ease of transactions, and profit analysis combined with rollover opportunities. Transparency of estimates and expenses can be viewed by investors in real time. Your proceeds can easily be rolled over to upcoming projects with more chances of success, inshaAllah.",
+    body: "Our methodology is grounded in years of hands-on experience and refined through every project we undertake. Investors receive timely progress updates, streamlined transaction processes, and detailed profit analysis throughout. Full transparency of costs and estimates is accessible in real time, and proceeds can seamlessly roll over into subsequent projects — compounding portfolio growth with each cycle.",
   },
   {
     icon: (
@@ -24,7 +24,7 @@ const features = [
       </svg>
     ),
     title: "Why Us?",
-    body: "We take the lead in assuring you that the money sitting in your bank can be invested in profitable halal ventures. We analyze markets and make comparisons before choosing the right property for you. Every potential property is researched in detail before making the final move, and our experience allows us to create different investment scenarios so each decision is made wisely.",
+    body: "Our team is dedicated to putting idle capital to work through profitable, Sharia-compliant real estate ventures. Every opportunity is preceded by rigorous market analysis and comparative research to identify the right property at the right time. We model multiple investment scenarios for each acquisition so that every decision is informed, strategic, and aligned with your financial goals. Our track record makes the case.",
   },
 ];
 
@@ -84,14 +84,14 @@ export function WhoWeAre() {
           </h2>
           <div className="w-8 h-[2px] bg-[#3a7bd5] mb-6" />
           <p className="text-[13px] font-sans leading-[1.9] text-[#4a6080] mb-4">
-            Grand Home Investments has been building quality homes in NJ and has completed over 100 projects
-            in NJ and PA. We have built an incomparable reputation in the area over the years through referrals
-            and impeccable reviews by building and delivering only the highest quality of homes.
+            With over 100 completed projects across New Jersey and Pennsylvania, Grand Home Investments has
+            cultivated a distinguished reputation built on client referrals and consistently exceptional reviews.
+            Our standing in the region reflects an unwavering commitment to delivering homes of the highest standard.
           </p>
           <p className="text-[13px] font-sans leading-[1.9] text-[#4a6080] mb-7">
-            We are creating homes that are built to last — efficient, sustainable, and using trusted brands for
-            building materials and appliances. Our experienced Design Consultants will curate a personalised
-            array of home design options just for you, from design all the way through the entire building process.
+            Every home we build is engineered to endure — energy-efficient, sustainable, and constructed using
+            premium materials and appliances from trusted brands. Our experienced Design Consultants guide each
+            client through a fully personalised design journey, from initial concept through to project completion.
           </p>
           <a
             href="#contact-info"
