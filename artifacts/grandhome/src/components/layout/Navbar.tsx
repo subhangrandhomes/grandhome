@@ -1,10 +1,13 @@
 import { useState } from "react";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { ListPropertyModal } from "@/components/properties/ListPropertyModal";
 import { useAdmin } from "@/context/AdminContext";
 
 export function Navbar() {
   const { isAdmin, login, logout } = useAdmin();
+  const [location] = useLocation();
+  const isHome = location === "/" || location === "";
+  const h = (anchor: string) => isHome ? anchor : `/${anchor}`;
   const [modalOpen, setModalOpen] = useState(false);
   const [lockOpen, setLockOpen] = useState(false);
   const [password, setPassword] = useState("");
@@ -113,16 +116,24 @@ export function Navbar() {
       {/* Sticky nav */}
       <nav className="bg-white border-b border-blue-100 sticky top-0 z-50">
         <ul className="flex justify-center gap-10 list-none px-10 h-11 items-center">
-          <li><a href="#" className="text-[11px] font-semibold tracking-[.14em] uppercase text-[#3a6199] hover:text-[#0f2d56] hover:border-b hover:border-[#1a4a8a] pb-[2px] transition-colors">Home</a></li>
-          <li><a href="#listings" className="text-[11px] font-semibold tracking-[.14em] uppercase text-[#3a6199] hover:text-[#0f2d56] hover:border-b hover:border-[#1a4a8a] pb-[2px] transition-colors">Our listings</a></li>
-          <li><a href="#listings" className="text-[11px] font-semibold tracking-[.14em] uppercase text-[#3a6199] hover:text-[#0f2d56] hover:border-b hover:border-[#1a4a8a] pb-[2px] transition-colors">Buy</a></li>
-          <li><a href="#about" className="text-[11px] font-semibold tracking-[.14em] uppercase text-[#3a6199] hover:text-[#0f2d56] hover:border-b hover:border-[#1a4a8a] pb-[2px] transition-colors">About us</a></li>
+          {[
+            { label: "Home", href: h("#") },
+            { label: "Our listings", href: h("#listings") },
+            { label: "Buy", href: h("#listings") },
+            { label: "About us", href: h("#about") },
+            { label: "Contact", href: h("#contact-info") },
+          ].map((item) => (
+            <li key={item.label}>
+              <a href={item.href} className="text-[11px] font-semibold tracking-[.14em] uppercase text-[#3a6199] hover:text-[#0f2d56] hover:border-b hover:border-[#1a4a8a] pb-[2px] transition-colors">
+                {item.label}
+              </a>
+            </li>
+          ))}
           <li>
             <Link href="/investments" className="text-[11px] font-semibold tracking-[.14em] uppercase text-[#3a6199] hover:text-[#0f2d56] hover:border-b hover:border-[#1a4a8a] pb-[2px] transition-colors">
               Investments
             </Link>
           </li>
-          <li><a href="#contact-info" className="text-[11px] font-semibold tracking-[.14em] uppercase text-[#3a6199] hover:text-[#0f2d56] hover:border-b hover:border-[#1a4a8a] pb-[2px] transition-colors">Contact</a></li>
         </ul>
       </nav>
 
