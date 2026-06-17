@@ -72,20 +72,6 @@ export function WhoWeAre() {
         </div>
       </div>
 
-      {/* Feature cards */}
-      <div className="bg-[#f8faff] px-8 md:px-20 py-14">
-        <div className="grid grid-cols-3 gap-6">
-          {features.map((f, i) => (
-            <div key={i} className="bg-white border border-blue-100 p-8 hover:shadow-md transition-shadow">
-              <div className="w-11 h-11 rounded-full bg-[#e8f0fa] flex items-center justify-center text-[#1a4a8a] mb-5">
-                {f.icon}
-              </div>
-              <h3 className="font-serif text-[19px] font-semibold text-[#0f2d56] mb-3">{f.title}</h3>
-              <p className="text-[12px] font-sans leading-[1.85] text-[#4a6080]">{f.body}</p>
-            </div>
-          ))}
-        </div>
-      </div>
     </section>
   );
 }
