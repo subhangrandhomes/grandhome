@@ -60,7 +60,6 @@ export function Hero() {
         <div className="flex justify-center gap-10 mt-14 pt-10 border-t border-white/10">
           {[
             { num: "150+", label: "Homes delivered" },
-            { num: "$250M+", label: "Total volume" },
             { num: "15+", label: "Years experience" },
           ].map((s, i) => (
             <div key={i} className="text-center">
