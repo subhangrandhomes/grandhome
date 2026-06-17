@@ -21,10 +21,8 @@ export function ListPropertyModal({ open, onClose }: ListPropertyModalProps) {
   const [basement, setBasement] = useState("none");
   const [livableArea, setLivableArea] = useState("");
   const [status, setStatus] = useState("ongoing");
-  const [projectCost, setProjectCost] = useState("");
   const [projectStartDate, setProjectStartDate] = useState("");
   const [projectCompletionDate, setProjectCompletionDate] = useState("");
-  const [soldPrice, setSoldPrice] = useState("");
   const [error, setError] = useState("");
   const [photos, setPhotos] = useState<string[]>([]);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -44,7 +42,7 @@ export function ListPropertyModal({ open, onClose }: ListPropertyModalProps) {
     setAddr(""); setMode("buy"); setPropType("House");
     setPrice(""); setBeds(""); setBaths(""); setSqft("");
     setBasement("none"); setLivableArea(""); setStatus("ongoing");
-    setProjectCost(""); setProjectStartDate(""); setProjectCompletionDate(""); setSoldPrice("");
+    setProjectStartDate(""); setProjectCompletionDate("");
     setError(""); setPhotos([]); setTab("details");
     onClose();
   };
@@ -81,10 +79,8 @@ export function ListPropertyModal({ open, onClose }: ListPropertyModalProps) {
         status,
         basement: basement !== "none" ? basement : undefined,
         livableArea: livableArea ? parseInt(livableArea) : undefined,
-        projectCost: projectCost ? parseInt(projectCost) : undefined,
         projectStartDate: projectStartDate || undefined,
         projectCompletionDate: projectCompletionDate || undefined,
-        soldPrice: soldPrice ? parseInt(soldPrice) : undefined,
       } as never,
     });
   };
@@ -234,44 +230,6 @@ export function ListPropertyModal({ open, onClose }: ListPropertyModalProps) {
                   <option value="completed">Completed</option>
                 </select>
               </div>
-
-              <div className="grid grid-cols-2 gap-[14px]">
-                <div className="flex flex-col gap-[6px]">
-                  <label className={labelClass}>Project cost ($)</label>
-                  <input
-                    type="number"
-                    value={projectCost}
-                    onChange={(e) => setProjectCost(e.target.value)}
-                    placeholder="e.g. 320000"
-                    min="0"
-                    className={inputClass + " w-full"}
-                  />
-                </div>
-                <div className="flex flex-col gap-[6px]">
-                  <label className={labelClass}>{status === "completed" ? "Sold price ($)" : "Expected list value ($)"}</label>
-                  <input
-                    type="number"
-                    value={soldPrice}
-                    onChange={(e) => setSoldPrice(e.target.value)}
-                    placeholder="e.g. 450000"
-                    min="0"
-                    className={inputClass + " w-full"}
-                  />
-                </div>
-              </div>
-
-              {projectCost && soldPrice && (
-                <div className="bg-[#f0f5ff] border border-blue-100 px-4 py-3 flex items-center justify-between">
-                  <span className="text-[11px] font-sans font-semibold tracking-[.1em] uppercase text-[#6b88aa]">Estimated ROI</span>
-                  <span className={`font-serif text-[22px] font-bold ${
-                    parseInt(soldPrice) >= parseInt(projectCost) ? "text-green-600" : "text-red-500"
-                  }`}>
-                    {parseInt(projectCost) > 0
-                      ? `${parseInt(soldPrice) >= parseInt(projectCost) ? "+" : ""}${(((parseInt(soldPrice) - parseInt(projectCost)) / parseInt(projectCost)) * 100).toFixed(1)}%`
-                      : "—"}
-                  </span>
-                </div>
-              )}
 
               <div className="grid grid-cols-2 gap-[14px]">
                 <div className="flex flex-col gap-[6px]">
