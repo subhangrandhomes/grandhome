@@ -31,12 +31,6 @@ const WHY_ITEMS = [
   },
 ];
 
-const HOW_STEPS = [
-  { num: "01", title: "Express Interest", body: "Reach out to our investment team by phone or email. We'll schedule a personal consultation to learn your goals." },
-  { num: "02", title: "Review Opportunities", body: "We'll share current projects that match your investment profile — with full details, locations, and projected returns." },
-  { num: "03", title: "Commit & Close", body: "Once you've selected a project, our team handles all paperwork and guides you through a smooth closing process." },
-  { num: "04", title: "Grow Your Portfolio", body: "As a Grand Homes investor, you'll receive ongoing updates and first access to future off-market opportunities." },
-];
 
 export default function Investments() {
   return (
@@ -102,29 +96,6 @@ export default function Investments() {
               </div>
               <h3 className="font-serif text-[19px] font-semibold text-[#0f2d56] mb-3">{item.title}</h3>
               <p className="text-[12px] font-sans leading-[1.85] text-[#4a6080]">{item.body}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* How it works */}
-      <section className="py-20 px-20 bg-white">
-        <div className="text-center mb-14">
-          <p className="text-[10px] font-sans font-semibold tracking-[.3em] uppercase text-[#3a7bd5] mb-2">Simple Process</p>
-          <h2 className="font-serif text-[34px] font-semibold text-[#0f2d56]">How It Works</h2>
-          <div className="w-10 h-[2px] bg-[#3a7bd5] mx-auto mt-4" />
-        </div>
-        <div className="grid grid-cols-4 gap-6 max-w-5xl mx-auto">
-          {HOW_STEPS.map((step, i) => (
-            <div key={i} className="text-center relative">
-              {i < HOW_STEPS.length - 1 && (
-                <div className="hidden md:block absolute top-6 left-[60%] w-[80%] h-[1px] bg-blue-200" />
-              )}
-              <div className="w-12 h-12 rounded-full border-2 border-[#1a4a8a] flex items-center justify-center mx-auto mb-5 bg-white relative z-10">
-                <span className="font-sans text-[11px] font-bold text-[#1a4a8a] tracking-[.04em]">{step.num}</span>
-              </div>
-              <h3 className="font-serif text-[17px] font-semibold text-[#0f2d56] mb-2">{step.title}</h3>
-              <p className="text-[12px] font-sans leading-[1.8] text-[#6b88aa]">{step.body}</p>
             </div>
           ))}
         </div>
