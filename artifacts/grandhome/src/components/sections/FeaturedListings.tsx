@@ -9,7 +9,7 @@ export function FeaturedListings() {
   const [status, setStatus] = useState<StatusFilter>("ongoing");
   const [selected, setSelected] = useState<PropertyType | null>(null);
 
-  const { data: properties, isLoading } = useListProperties({ params: { status } } as never);
+  const { data: properties, isLoading } = useListProperties({ status });
 
   const tabs: { key: StatusFilter; label: string }[] = [
     { key: "ongoing", label: "Ongoing Projects" },
