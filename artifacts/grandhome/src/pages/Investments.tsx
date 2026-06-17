@@ -89,7 +89,7 @@ export default function Investments() {
           { num: "$250M+", label: "Total volume" },
           { num: "110%", label: "Avg. sale-to-list ratio" },
           { num: "15+", label: "Years experience" },
-          { num: "250+", label: "Homes delivered" },
+          { num: "150+", label: "Homes delivered" },
         ].map((s, i) => (
           <div key={i} className="py-10 text-center border-r border-blue-100 last:border-r-0">
             <div className="font-serif text-[38px] font-semibold text-[#0f2d56] leading-none mb-1">{s.num}</div>
