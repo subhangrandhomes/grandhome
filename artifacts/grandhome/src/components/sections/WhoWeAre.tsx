@@ -1,33 +1,3 @@
-const features = [
-  {
-    icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
-      </svg>
-    ),
-    title: "Halal & Safe Investments",
-    body: "We provide a secure investment environment fully aligned with Islamic values and Sharia-compliant principles. Our projects are strategically located in established central New Jersey communities with strong resale demand. Every investor becomes a named partner in the project LLC, ensuring complete financial transparency from acquisition through to closing.",
-  },
-  {
-    icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" />
-      </svg>
-    ),
-    title: "A Proven Approach",
-    body: "Our methodology is grounded in years of hands-on experience and refined through every project we undertake. Investors receive timely progress updates, streamlined transaction processes, and detailed profit analysis throughout. Full transparency of costs and estimates is accessible in real time, and proceeds can seamlessly roll over into subsequent projects — compounding portfolio growth with each cycle.",
-  },
-  {
-    icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M15.182 15.182a4.5 4.5 0 0 1-6.364 0M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Z" />
-      </svg>
-    ),
-    title: "Why Us?",
-    body: "Our team is dedicated to putting idle capital to work through profitable, Sharia-compliant real estate ventures. Every opportunity is preceded by rigorous market analysis and comparative research to identify the right property at the right time. We model multiple investment scenarios for each acquisition so that every decision is informed, strategic, and aligned with your financial goals. Our track record makes the case.",
-  },
-];
-
 export function WhoWeAre() {
   return (
     <section id="about">

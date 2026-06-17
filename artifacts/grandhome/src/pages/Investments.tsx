@@ -5,38 +5,29 @@ const WHY_ITEMS = [
   {
     icon: (
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-7 h-7">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
       </svg>
     ),
-    title: "New Construction Focus",
-    body: "We specialise in off-market new construction homes, giving investors first access to properties before they hit the public market.",
+    title: "Halal & Safe Investments",
+    body: "We provide a secure investment environment fully aligned with Islamic values and Sharia-compliant principles. Our projects are strategically located in established central New Jersey communities with strong resale demand. Every investor becomes a named partner in the project LLC, ensuring complete financial transparency from acquisition through to closing.",
   },
   {
     icon: (
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-7 h-7">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" />
       </svg>
     ),
-    title: "Strong Returns",
-    body: "Our portfolio consistently delivers above-market returns. We target properties with strong appreciation potential and rental yield.",
+    title: "A Proven Approach",
+    body: "Our methodology is grounded in years of hands-on experience and refined through every project we undertake. Investors receive timely progress updates, streamlined transaction processes, and detailed profit analysis throughout. Full transparency of costs and estimates is accessible in real time, and proceeds can seamlessly roll over into subsequent projects — compounding portfolio growth with each cycle.",
   },
   {
     icon: (
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-7 h-7">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M15.182 15.182a4.5 4.5 0 0 1-6.364 0M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Z" />
       </svg>
     ),
-    title: "Trusted & Transparent",
-    body: "Every deal is presented with full financials and clear projections. We believe in complete transparency so you can invest with confidence.",
-  },
-  {
-    icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-7 h-7">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
-      </svg>
-    ),
-    title: "Exclusive Network",
-    body: "Join a private network of investors who receive off-market opportunities, early project previews, and direct access to our acquisition team.",
+    title: "Why Us?",
+    body: "Our team is dedicated to putting idle capital to work through profitable, Sharia-compliant real estate ventures. Every opportunity is preceded by rigorous market analysis and comparative research to identify the right property at the right time. We model multiple investment scenarios for each acquisition so that every decision is informed, strategic, and aligned with your financial goals. Our track record makes the case.",
   },
 ];
 
@@ -103,14 +94,14 @@ export default function Investments() {
           <h2 className="font-serif text-[34px] font-semibold text-[#0f2d56]">Why Invest With Us</h2>
           <div className="w-10 h-[2px] bg-[#3a7bd5] mx-auto mt-4" />
         </div>
-        <div className="grid grid-cols-2 gap-8 max-w-5xl mx-auto">
+        <div className="grid grid-cols-3 gap-6 max-w-5xl mx-auto">
           {WHY_ITEMS.map((item, i) => (
-            <div key={i} className="bg-white border border-blue-100 p-8 flex gap-6 hover:shadow-md transition-shadow">
-              <div className="text-[#1a4a8a] flex-shrink-0 mt-1">{item.icon}</div>
-              <div>
-                <h3 className="font-serif text-[20px] font-semibold text-[#0f2d56] mb-2">{item.title}</h3>
-                <p className="text-[13px] font-sans leading-[1.8] text-[#4a6080]">{item.body}</p>
+            <div key={i} className="bg-white border border-blue-100 p-8 hover:shadow-md transition-shadow">
+              <div className="w-11 h-11 rounded-full bg-[#e8f0fa] flex items-center justify-center text-[#1a4a8a] mb-5">
+                {item.icon}
               </div>
+              <h3 className="font-serif text-[19px] font-semibold text-[#0f2d56] mb-3">{item.title}</h3>
+              <p className="text-[12px] font-sans leading-[1.85] text-[#4a6080]">{item.body}</p>
             </div>
           ))}
         </div>
