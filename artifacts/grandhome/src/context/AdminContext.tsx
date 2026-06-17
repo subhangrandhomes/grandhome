@@ -16,13 +16,15 @@ const AdminContext = createContext<AdminContextValue>({
   adminFetch: (url) => fetch(url),
 });
 
+const API_BASE = (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/+$/, "") ?? "";
+
 export function AdminProvider({ children }: { children: ReactNode }) {
   const [isAdmin, setIsAdmin] = useState(false);
   const [adminPassword, setAdminPassword] = useState("");
 
   const login = useCallback(async (password: string): Promise<boolean> => {
     try {
-      const res = await fetch("/api/admin/verify", {
+      const res = await fetch(`${API_BASE}/api/admin/verify`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ password }),
@@ -40,7 +42,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
   const logout = useCallback(() => { setIsAdmin(false); setAdminPassword(""); }, []);
 
   const adminFetch = useCallback((url: string, options: RequestInit = {}) => {
-    return fetch(url, {
+    return fetch(`${API_BASE}${url}`, {
       ...options,
       headers: { ...(options.headers ?? {}), "x-admin-password": adminPassword },
     });
