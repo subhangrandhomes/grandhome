@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { ListPropertyModal } from "@/components/properties/ListPropertyModal";
+import { useAdmin } from "@/context/AdminContext";
 
 export function CTAStrip() {
   const [modalOpen, setModalOpen] = useState(false);
+  const { isAdmin } = useAdmin();
 
   return (
     <>
@@ -41,12 +43,14 @@ export function CTAStrip() {
           >
             Contact us
           </a>
-          <button
-            onClick={() => setModalOpen(true)}
-            className="h-11 px-7 bg-white text-[#0f2d56] text-[10px] font-sans font-semibold tracking-[.14em] uppercase hover:bg-blue-50 transition-colors"
-          >
-            List a property
-          </button>
+          {isAdmin && (
+            <button
+              onClick={() => setModalOpen(true)}
+              className="h-11 px-7 bg-white text-[#0f2d56] text-[10px] font-sans font-semibold tracking-[.14em] uppercase hover:bg-blue-50 transition-colors"
+            >
+              List a property
+            </button>
+          )}
         </div>
       </div>
 
