@@ -84,10 +84,8 @@ export default function Investments() {
       </section>
 
       {/* Stats row */}
-      <div className="grid grid-cols-4 border-b border-blue-100">
+      <div className="grid grid-cols-2 border-b border-blue-100">
         {[
-          { num: "$250M+", label: "Total volume" },
-          { num: "110%", label: "Avg. sale-to-list ratio" },
           { num: "15+", label: "Years experience" },
           { num: "150+", label: "Homes delivered" },
         ].map((s, i) => (

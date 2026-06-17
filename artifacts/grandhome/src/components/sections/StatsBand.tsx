@@ -5,14 +5,12 @@ export function StatsBand() {
 
   const items = [
     { num: stats ? `${stats.totalListings}+` : "150+", label: "Homes delivered" },
-    { num: "110%", label: "Sale-to-list price ratio" },
     { num: "11", label: "Avg. days on market" },
-    { num: "$250M+", label: "Total volume sold" },
   ];
 
   return (
     <div
-      className="grid grid-cols-4"
+      className="grid grid-cols-2"
       style={{ background: "linear-gradient(90deg, #0c2548 0%, #1a4a8a 100%)" }}
     >
       {items.map((item, i) => (
