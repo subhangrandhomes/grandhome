@@ -4,7 +4,7 @@ export function StatsBand() {
   const { data: stats } = useGetPropertyStats();
 
   const items = [
-    { num: stats ? `${stats.totalListings}+` : "250+", label: "Homes delivered" },
+    { num: stats ? `${stats.totalListings}+` : "150+", label: "Homes delivered" },
     { num: "110%", label: "Sale-to-list price ratio" },
     { num: "11", label: "Avg. days on market" },
     { num: "$250M+", label: "Total volume sold" },
