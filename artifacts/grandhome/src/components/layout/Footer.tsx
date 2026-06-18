@@ -36,9 +36,9 @@ export function Footer() {
               Location
             </h4>
             <address className="text-[12px] font-sans leading-[2] text-slate-400 not-italic">
-              Suite 245<br />
               53 Knightsbridge Rd<br />
-              Piscataway, NJ 08854
+              Piscataway, NJ 08854<br />
+              Suite 245
             </address>
           </div>
 

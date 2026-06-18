@@ -33,13 +33,13 @@ export function Navbar() {
   return (
     <>
       <header className="sticky top-0 z-50 bg-white border-b border-slate-200 shadow-[0_1px_8px_rgba(15,45,86,0.07)]">
-        <div className="flex items-center px-8 h-[88px] max-w-[1400px] mx-auto">
+        <div className="flex items-center px-8 h-[108px] max-w-[1400px] mx-auto">
           {/* Logo */}
           <a href={isHome ? "#" : "/"} className="flex-shrink-0">
             <img
               src="/logo.png"
               alt="Grand Homes — Residential Construction & Investments"
-              className="h-[76px] w-auto object-contain"
+              className="h-[96px] w-auto object-contain"
             />
           </a>
 
