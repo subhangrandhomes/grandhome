@@ -49,23 +49,13 @@ export function Footer() {
             </h4>
             <div className="text-[12px] font-sans leading-[2] text-slate-400 space-y-0">
               <div>
-                <a href="mailto:haroon.grandhomes@gmail.com" className="hover:text-white transition-colors">
-                  haroon.grandhomes@gmail.com
+                <a href="mailto:grandhomeinvestments@gmail.com" className="hover:text-white transition-colors">
+                  grandhomeinvestments@gmail.com
                 </a>
               </div>
               <div>
-                <a href="tel:7325265695" className="hover:text-white transition-colors">
-                  732-526-5695
-                </a>
-              </div>
-              <div className="pt-3">
-                <a href="mailto:aamirali@hotmail.com" className="hover:text-white transition-colors">
-                  aamirali@hotmail.com
-                </a>
-              </div>
-              <div>
-                <a href="tel:7322334744" className="hover:text-white transition-colors">
-                  732-233-4744
+                <a href="tel:9083120636" className="hover:text-white transition-colors">
+                  908-312-0636
                 </a>
               </div>
             </div>
