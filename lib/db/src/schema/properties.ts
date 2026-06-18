@@ -1,4 +1,4 @@
-import { pgTable, serial, text, integer, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, serial, text, integer, real, timestamp } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod/v4";
 
@@ -9,7 +9,7 @@ export const propertiesTable = pgTable("properties", {
   price: text("price").notNull(),
   priceValue: integer("price_value"),
   beds: integer("beds").notNull(),
-  baths: integer("baths").notNull(),
+  baths: real("baths").notNull(),
   sqft: integer("sqft").notNull(),
   type: text("type").notNull(),
   mode: text("mode").notNull(),

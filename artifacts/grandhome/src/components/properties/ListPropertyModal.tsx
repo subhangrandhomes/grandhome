@@ -71,7 +71,7 @@ export function ListPropertyModal({ open, onClose }: ListPropertyModalProps) {
         address: addr,
         price,
         beds: parseInt(beds),
-        baths: parseInt(baths),
+        baths: parseFloat(baths),
         sqft: parseInt(sqft),
         type: propType,
         mode,
@@ -173,9 +173,9 @@ export function ListPropertyModal({ open, onClose }: ListPropertyModalProps) {
 
               <div className="grid grid-cols-3 gap-[14px]">
                 {[
-                  { label: "Bedrooms *", value: beds, set: setBeds, placeholder: "3" },
-                  { label: "Bathrooms *", value: baths, set: setBaths, placeholder: "2" },
-                  { label: "Sq ft *", value: sqft, set: setSqft, placeholder: "1500" },
+                  { label: "Bedrooms *", value: beds, set: setBeds, placeholder: "3", step: "1" },
+                  { label: "Bathrooms *", value: baths, set: setBaths, placeholder: "2", step: "0.5" },
+                  { label: "Sq ft *", value: sqft, set: setSqft, placeholder: "1500", step: "1" },
                 ].map((field) => (
                   <div key={field.label} className="flex flex-col gap-[6px]">
                     <label className={labelClass}>{field.label}</label>
@@ -185,6 +185,7 @@ export function ListPropertyModal({ open, onClose }: ListPropertyModalProps) {
                       onChange={(e) => field.set(e.target.value)}
                       placeholder={field.placeholder}
                       min="0"
+                      step={field.step}
                       className={inputClass + " w-full"}
                     />
                   </div>

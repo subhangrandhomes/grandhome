@@ -253,7 +253,7 @@ components:
         beds:
           type: integer
         baths:
-          type: integer
+          type: number
         sqft:
           type: integer
         type:
@@ -313,7 +313,7 @@ components:
         beds:
           type: integer
         baths:
-          type: integer
+          type: number
         sqft:
           type: integer
         type:
