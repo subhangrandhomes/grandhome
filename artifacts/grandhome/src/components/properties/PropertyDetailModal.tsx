@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import {
   useDeleteProperty,
@@ -84,6 +84,8 @@ export function PropertyDetailModal({ property: initialProp, onClose }: Props) {
   const [eStartDate, setEStartDate] = useState("");
   const [eCompletionDate, setECompletionDate] = useState("");
   const [eSaveError, setESaveError] = useState("");
+  const [ePhotos, setEPhotos] = useState<string[]>([]);
+  const eFileRef = useRef<HTMLInputElement>(null);
 
   const invalidate = () => {
     queryClient.invalidateQueries({ queryKey: getGetFeaturedPropertiesQueryKey() });
@@ -124,8 +126,22 @@ export function PropertyDetailModal({ property: initialProp, onClose }: Props) {
     setELivableArea(p.livableArea ? String(p.livableArea) : "");
     setEStartDate(toDateInput(p.projectStartDate));
     setECompletionDate(toDateInput(p.projectCompletionDate));
+    setEPhotos(p.photos ?? []);
     setESaveError("");
     setEditing(true);
+  };
+
+  const handleEPhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files ?? []);
+    files.forEach((file) => {
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        if (ev.target?.result)
+          setEPhotos((prev) => [...prev, ev.target!.result as string]);
+      };
+      reader.readAsDataURL(file);
+    });
+    e.target.value = "";
   };
 
   const handleSave = () => {
@@ -140,7 +156,7 @@ export function PropertyDetailModal({ property: initialProp, onClose }: Props) {
         address: eAddr,
         price: ePrice,
         beds: parseInt(eBeds),
-        baths: parseInt(eBaths),
+        baths: parseFloat(eBaths),
         sqft: parseInt(eSqft),
         type: eType,
         mode: eMode,
@@ -149,6 +165,7 @@ export function PropertyDetailModal({ property: initialProp, onClose }: Props) {
         livableArea: eLivableArea ? parseInt(eLivableArea) : undefined,
         projectStartDate: eStartDate || undefined,
         projectCompletionDate: eCompletionDate || undefined,
+        photos: ePhotos,
       } as never,
     });
   };
@@ -410,6 +427,45 @@ export function PropertyDetailModal({ property: initialProp, onClose }: Props) {
                     <label className={labelCls}>{eStatus === "completed" ? "Completion date" : "Expected completion"}</label>
                     <input type="date" value={eCompletionDate} onChange={(e) => setECompletionDate(e.target.value)} className={inputCls} />
                   </div>
+                </div>
+
+                {/* Photos */}
+                <div className="flex flex-col gap-2 pt-1 pb-1">
+                  <label className={labelCls}>Photos</label>
+                  {ePhotos.length > 0 && (
+                    <div className="grid grid-cols-3 gap-1">
+                      {ePhotos.map((src, i) => (
+                        <div key={i} className="relative aspect-[4/3] border border-blue-100 overflow-hidden">
+                          <img src={src} alt={`Photo ${i + 1}`} className="w-full h-full object-cover" />
+                          <button
+                            onClick={() => setEPhotos((prev) => prev.filter((_, j) => j !== i))}
+                            className="absolute top-1 right-1 bg-[#0f2d56]/80 text-white w-5 h-5 rounded-full text-[12px] flex items-center justify-center leading-none hover:bg-red-600 transition-colors"
+                          >
+                            &times;
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  {ePhotos.length < 9 && (
+                    <div
+                      onClick={() => eFileRef.current?.click()}
+                      className="border-2 border-dashed border-blue-200 py-4 text-center cursor-pointer hover:border-[#1a4a8a] hover:bg-[#f0f5ff] transition-colors"
+                    >
+                      <input
+                        ref={eFileRef}
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        className="hidden"
+                        onChange={handleEPhotoUpload}
+                      />
+                      <div className="text-[10px] font-sans font-semibold tracking-[.1em] uppercase text-[#1a4a8a]">
+                        + Add photos
+                      </div>
+                      <div className="text-[10px] font-sans text-blue-400 mt-[2px]">JPG, PNG, WEBP</div>
+                    </div>
+                  )}
                 </div>
 
                 {eSaveError && (
