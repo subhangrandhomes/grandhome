@@ -32,10 +32,10 @@ export function Navbar() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 bg-white border-b border-slate-200 shadow-[0_1px_8px_rgba(15,45,86,0.07)]">
-        <div className="flex items-center px-8 h-[108px] max-w-[1400px] mx-auto">
+      <header className="sticky top-0 z-50 bg-white border-b border-slate-200 shadow-[0_1px_8px_rgba(15,45,86,0.07)] overflow-visible">
+        <div className="flex items-center px-8 h-[72px] max-w-[1400px] mx-auto overflow-visible">
           {/* Logo */}
-          <a href={isHome ? "#" : "/"} className="flex-shrink-0">
+          <a href={isHome ? "#" : "/"} className="flex-shrink-0 self-end">
             <img
               src="/logo.png"
               alt="Grand Homes — Residential Construction & Investments"
