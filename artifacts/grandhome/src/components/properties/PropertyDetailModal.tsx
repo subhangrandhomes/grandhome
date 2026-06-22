@@ -161,7 +161,7 @@ export function PropertyDetailModal({ property: initialProp, onClose }: Props) {
         type: eType,
         mode: eMode,
         status: eStatus,
-        basement: eBasement !== "none" ? eBasement : undefined,
+        basement: eBasement !== "none" ? eBasement : null,
         livableArea: eLivableArea ? parseInt(eLivableArea) : undefined,
         projectStartDate: eStartDate || undefined,
         projectCompletionDate: eCompletionDate || undefined,
