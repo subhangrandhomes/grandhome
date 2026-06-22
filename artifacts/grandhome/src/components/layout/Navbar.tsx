@@ -7,7 +7,6 @@ export function Navbar() {
   const { isAdmin, login, logout } = useAdmin();
   const [location] = useLocation();
   const isHome = location === "/" || location === "";
-  const h = (anchor: string) => isHome ? anchor : `/${anchor}`;
   const [modalOpen, setModalOpen] = useState(false);
   const [lockOpen, setLockOpen] = useState(false);
   const [password, setPassword] = useState("");
@@ -24,11 +23,23 @@ export function Navbar() {
   };
 
   const navLinks = [
-    { label: "Home", href: h("#") },
-    { label: "Our Listings", href: h("#listings") },
-    { label: "About Us", href: h("#about") },
-    { label: "Contact", href: h("#contact-info") },
+    { label: "Home", anchor: "" },
+    { label: "Our Listings", anchor: "listings" },
+    { label: "About Us", anchor: "about" },
+    { label: "Contact", anchor: "contact-info" },
   ];
+
+  const scrollTo = (anchor: string) => {
+    if (!isHome) {
+      window.location.href = anchor ? `/#${anchor}` : "/";
+      return;
+    }
+    if (!anchor) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      document.getElementById(anchor)?.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   return (
     <>
@@ -48,12 +59,12 @@ export function Navbar() {
             <ul className="flex items-center gap-1 list-none">
               {navLinks.map((item) => (
                 <li key={item.label}>
-                  <a
-                    href={item.href}
+                  <button
+                    onClick={() => scrollTo(item.anchor)}
                     className="px-4 py-2 text-[11px] font-semibold tracking-[.12em] uppercase text-[#4a6080] hover:text-[#0f2d56] transition-colors rounded"
                   >
                     {item.label}
-                  </a>
+                  </button>
                 </li>
               ))}
               <li>
@@ -77,12 +88,12 @@ export function Navbar() {
                 + List
               </button>
             )}
-            <a
-              href={h("#contact-info")}
+            <button
+              onClick={() => scrollTo("contact-info")}
               className="h-9 px-5 text-[10px] font-semibold tracking-[.12em] uppercase bg-[#0f2d56] text-white hover:bg-[#1a4a8a] transition-colors inline-flex items-center"
             >
               Contact Us
-            </a>
+            </button>
             <button
               onClick={() => { if (isAdmin) logout(); else { setLockOpen((o) => !o); setError(""); setPassword(""); } }}
               title={isAdmin ? "Sign out of admin" : "Admin login"}
