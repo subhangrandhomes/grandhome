@@ -300,7 +300,7 @@ export function PropertyDetailModal({ property: initialProp, onClose }: Props) {
                     { label: "Property type", value: p.type },
                     { label: "Listing type", value: p.mode === "rent" ? "For rent" : "For sale" },
                     { label: "Project status", value: isCompleted ? "Completed" : "Ongoing" },
-                    { label: "Basement", value: p.basement ? p.basement.charAt(0).toUpperCase() + p.basement.slice(1) : "—" },
+                    { label: "Basement", value: p.basement ? p.basement.charAt(0).toUpperCase() + p.basement.slice(1) : "None" },
                     { label: "Livable area", value: p.livableArea ? `${fmt(p.livableArea)} sq ft` : "—" },
                     { label: "Start date", value: p.projectStartDate ? fmtDate(p.projectStartDate) : "—" },
                     { label: isCompleted ? "Completion date" : "Expected completion", value: p.projectCompletionDate ? fmtDate(p.projectCompletionDate) : "—" },
