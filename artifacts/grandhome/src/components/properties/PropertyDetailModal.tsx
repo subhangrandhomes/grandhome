@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useQueryClient } from "@tanstack/react-query";
+import { uploadToCloudinary } from "@/lib/cloudinary";
 import {
   useDeleteProperty,
   useUpdateProperty,
@@ -85,6 +86,7 @@ export function PropertyDetailModal({ property: initialProp, onClose }: Props) {
   const [eCompletionDate, setECompletionDate] = useState("");
   const [eSaveError, setESaveError] = useState("");
   const [ePhotos, setEPhotos] = useState<string[]>([]);
+  const [eUploading, setEUploading] = useState(false);
   const eFileRef = useRef<HTMLInputElement>(null);
 
   const invalidate = () => {
@@ -131,17 +133,19 @@ export function PropertyDetailModal({ property: initialProp, onClose }: Props) {
     setEditing(true);
   };
 
-  const handleEPhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleEPhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files ?? []);
-    files.forEach((file) => {
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        if (ev.target?.result)
-          setEPhotos((prev) => [...prev, ev.target!.result as string]);
-      };
-      reader.readAsDataURL(file);
-    });
     e.target.value = "";
+    if (!files.length) return;
+    setEUploading(true);
+    try {
+      const urls = await Promise.all(files.map((f) => uploadToCloudinary(f)));
+      setEPhotos((prev) => [...prev, ...urls]);
+    } catch {
+      setESaveError("One or more photos failed to upload. Please try again.");
+    } finally {
+      setEUploading(false);
+    }
   };
 
   const handleSave = () => {
@@ -449,8 +453,8 @@ export function PropertyDetailModal({ property: initialProp, onClose }: Props) {
                   )}
                   {ePhotos.length < 9 && (
                     <div
-                      onClick={() => eFileRef.current?.click()}
-                      className="border-2 border-dashed border-blue-200 py-4 text-center cursor-pointer hover:border-[#1a4a8a] hover:bg-[#f0f5ff] transition-colors"
+                      onClick={() => !eUploading && eFileRef.current?.click()}
+                      className={`border-2 border-dashed border-blue-200 py-4 text-center transition-colors ${eUploading ? "opacity-60 cursor-wait" : "cursor-pointer hover:border-[#1a4a8a] hover:bg-[#f0f5ff]"}`}
                     >
                       <input
                         ref={eFileRef}
@@ -461,9 +465,11 @@ export function PropertyDetailModal({ property: initialProp, onClose }: Props) {
                         onChange={handleEPhotoUpload}
                       />
                       <div className="text-[10px] font-sans font-semibold tracking-[.1em] uppercase text-[#1a4a8a]">
-                        + Add photos
+                        {eUploading ? "Uploading…" : "+ Add photos"}
                       </div>
-                      <div className="text-[10px] font-sans text-blue-400 mt-[2px]">JPG, PNG, WEBP</div>
+                      <div className="text-[10px] font-sans text-blue-400 mt-[2px]">
+                        {eUploading ? "Please wait" : "JPG, PNG, WEBP"}
+                      </div>
                     </div>
                   )}
                 </div>

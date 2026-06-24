@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCreateProperty, getGetFeaturedPropertiesQueryKey, getListPropertiesQueryKey } from "@workspace/api-client-react";
+import { uploadToCloudinary } from "@/lib/cloudinary";
 
 interface ListPropertyModalProps {
   open: boolean;
@@ -25,6 +26,7 @@ export function ListPropertyModal({ open, onClose }: ListPropertyModalProps) {
   const [projectCompletionDate, setProjectCompletionDate] = useState("");
   const [error, setError] = useState("");
   const [photos, setPhotos] = useState<string[]>([]);
+  const [uploading, setUploading] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const createProperty = useCreateProperty({
@@ -47,16 +49,19 @@ export function ListPropertyModal({ open, onClose }: ListPropertyModalProps) {
     onClose();
   };
 
-  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files ?? []);
-    files.forEach((file) => {
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        if (ev.target?.result) setPhotos((prev) => [...prev, ev.target!.result as string]);
-      };
-      reader.readAsDataURL(file);
-    });
     e.target.value = "";
+    if (!files.length) return;
+    setUploading(true);
+    try {
+      const urls = await Promise.all(files.map((f) => uploadToCloudinary(f)));
+      setPhotos((prev) => [...prev, ...urls]);
+    } catch {
+      setError("One or more photos failed to upload. Please try again.");
+    } finally {
+      setUploading(false);
+    }
   };
 
   const handleSubmit = () => {
@@ -259,8 +264,8 @@ export function ListPropertyModal({ open, onClose }: ListPropertyModalProps) {
             <>
               {photos.length < 9 && (
                 <div
-                  onClick={() => fileRef.current?.click()}
-                  className="border-2 border-dashed border-blue-200 p-8 text-center cursor-pointer hover:border-[#1a4a8a] hover:bg-[#f0f5ff] transition-colors"
+                  onClick={() => !uploading && fileRef.current?.click()}
+                  className={`border-2 border-dashed border-blue-200 p-8 text-center transition-colors ${uploading ? "opacity-60 cursor-wait" : "cursor-pointer hover:border-[#1a4a8a] hover:bg-[#f0f5ff]"}`}
                 >
                   <input
                     ref={fileRef}
@@ -271,9 +276,11 @@ export function ListPropertyModal({ open, onClose }: ListPropertyModalProps) {
                     onChange={handlePhotoUpload}
                   />
                   <div className="text-[12px] font-sans font-semibold tracking-[.1em] uppercase text-[#1a4a8a] mb-1">
-                    Upload photos
+                    {uploading ? "Uploading…" : "Upload photos"}
                   </div>
-                  <div className="text-[11px] font-sans text-blue-400">Click to select images (JPG, PNG, WEBP)</div>
+                  <div className="text-[11px] font-sans text-blue-400">
+                    {uploading ? "Please wait" : "Click to select images (JPG, PNG, WEBP)"}
+                  </div>
                 </div>
               )}
               {photos.length > 0 && (
